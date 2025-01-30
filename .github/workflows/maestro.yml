@@ -30,7 +30,7 @@ jobs:
       - name: Run Maestro Tests
         continue-on-error: true
         run: |
-          maestro test flows.yaml --output report.xml
+          maestro test maestro_flows/flows.yaml --output report.xml
           if [ ! -f report.xml ]; then
             echo "⚠️ ERROR: report.xml was not generated!"
             exit 1
