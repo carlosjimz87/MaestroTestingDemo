@@ -1,0 +1,50 @@
+name: Run Maestro Tests
+
+on:
+  push:
+    branches:
+      - main  # Run tests on pushes to the main branch
+  pull_request:  # Run tests on pull requests
+    branches:
+      - main
+
+jobs:
+  maestro-tests:
+    runs-on: ubuntu-latest  # GitHub-hosted runner
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install dependencies (e.g., Maestro CLI)
+      - name: Install Maestro CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip
+          unzip maestro.zip -d /usr/local/bin
+          chmod +x /usr/local/bin/maestro
+
+      # Run Maestro tests
+      - name: Run Maestro Tests
+        run: |
+          maestro --version  # Verify Maestro installation
+          maestro test flows.yaml --output report.xml
+
+      # Upload the test results
+      - name: Upload Maestro Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: maestro-report
+          path: report.xml
+
+      # Optional: Annotate failures in the pull request
+      - name: Upload Test Results to GitHub
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const results = fs.readFileSync('report.xml', 'utf8');
+            console.log(`Test Report:\n${results}`);
