@@ -20,11 +20,8 @@ jobs:
       # Install dependencies (e.g., Maestro CLI)
       - name: Install Maestro CLI
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          wget https://github.com/mobile-dev-inc/maestro/releases/latest/download/maestro.zip
-          unzip maestro.zip -d /usr/local/bin
-          chmod +x /usr/local/bin/maestro
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
       # Run Maestro tests
       - name: Run Maestro Tests
