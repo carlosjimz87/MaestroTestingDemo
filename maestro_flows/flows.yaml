@@ -1,0 +1,13 @@
+appId: com.carlosjimz87.maestrotestingdemo  # Define appId at the top
+
+config:
+  defaultTimeout: 300
+  animationSpeed: 3.0
+  interactionSpeed: 0
+
+---
+- launchApp:
+    clearState: true
+- runFlow: login2home.yaml
+- runFlow: home2details.yaml
+- runFlow: details2delayedOp.yaml

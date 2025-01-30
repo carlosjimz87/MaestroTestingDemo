@@ -1,6 +1,7 @@
 package com.carlosjimz87.maestrotestingdemo.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -27,14 +29,20 @@ fun DelayedOperationScreen() {
         isLoading = false
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center // Ensures content is centered
     ) {
         if (isLoading) {
             CircularProgressIndicator()
         } else {
-            Text("Delayed Operation Completed", style = MaterialTheme.typography.headlineMedium, color = Color.Blue)
+            Text(
+                text = "Delayed Operation Completed",
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.Blue
+            )
         }
     }
 }

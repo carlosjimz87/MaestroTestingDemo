@@ -1,0 +1,9 @@
+appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
+
+---
+- tapOn: "Username"
+- inputText: "carlos"
+- tapOn: "Password"
+- inputText: "1234"
+- tapOn: "Login"
+- assertVisible: "Home Screen"

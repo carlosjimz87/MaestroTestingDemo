@@ -39,7 +39,7 @@ fun HomeScreen(navController: NavController) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { navController.navigate("delayed") }) {
-            Text("Test Delayed Operation")
+            Text("Run")
         }
     }
 }
