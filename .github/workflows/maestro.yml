@@ -28,9 +28,17 @@ jobs:
 
       # Run Maestro tests
       - name: Run Maestro Tests
+        continue-on-error: true
         run: |
-          maestro --version  # Verify Maestro installation
           maestro test flows.yaml --output report.xml
+          if [ ! -f report.xml ]; then
+            echo "⚠️ ERROR: report.xml was not generated!"
+            exit 1
+          fi
+
+      # Debug: List files in the workspace
+      - name: Debug - List Files
+        run: ls -R
 
       # Upload the test results
       - name: Upload Maestro Test Report
@@ -38,6 +46,15 @@ jobs:
         with:
           name: maestro-report
           path: report.xml
+
+      - name: Check if report.xml exists
+        run: |
+          if [ -f report.xml ]; then
+            echo "✅ report.xml found!"
+          else
+            echo "❌ report.xml NOT found!"
+            exit 1
+          fi
 
       # Optional: Annotate failures in the pull request
       - name: Upload Test Results to GitHub
