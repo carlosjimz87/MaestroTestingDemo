@@ -1,65 +1,110 @@
-name: Run Maestro Tests
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  maestro-tests:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
+      - name: Checkout the code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Java (required for Android tools)
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '11'
+      - name: Run lint checks
+        run: ./gradlew lint
 
-      # Step 3: Set up Android SDK
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          api-level: 30          # Define Android API Level
-          target: default        # Use default target
-          arch: x86_64           # Use x86_64 architecture for emulator
-          profile: default       # Default profile
-          emulator-options: "-no-snapshot -no-window -gpu swiftshader_indirect"
-
-      # Step 4: Start the Android emulator
-      - name: Start Emulator
-        run: |
-          adb devices
-          adb wait-for-device
-          adb shell settings put global window_animation_scale 0
-          adb shell settings put global transition_animation_scale 0
-          adb shell settings put global animator_duration_scale 0
-
-      # Step 5: Install Maestro CLI
-      - name: Install Maestro CLI
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-
-      # Step 6: Verify Emulator is Running
-      - name: Verify Emulator is Running
-        run: adb devices
-
-      # Step 7: Run Maestro Tests
-      - name: Run Maestro Tests
-        run: maestro test maestro_flows/flows.yaml --output report.xml
-
-      # Step 8: Upload Maestro Test Report
-      - name: Upload Maestro Test Report
+      - name: Upload HTML Lint Report
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-report
-          path: ./report.xml
+          name: lint.html
+          path: app/build/reports/lint-results-debug.html
+
+  unit-test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Upload Unit Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+
+  instrumentation-test:
+    needs: [unit-test]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Run Espresso Tests with Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          script: ./gradlew connectedCheck
+          profile: default
+          emulator-options: "-no-snapshot -no-window -gpu swiftshader_indirect"
+
+      - name: Upload Instrumentation Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: instrumentation_test_report
+          path: app/build/reports/androidTests/connected/
+
+  static-code-analysis:
+    needs: [instrumentation-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: Run SonarCloud Analysis
+        run: ./gradlew app:sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  package:
+    needs: [static-code-analysis]
+    name: Generate APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
