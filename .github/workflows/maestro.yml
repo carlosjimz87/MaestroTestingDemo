@@ -10,55 +10,38 @@ on:
 
 jobs:
   maestro-tests:
-    runs-on: ubuntu-latest  # GitHub-hosted runner
+    runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install dependencies (e.g., Maestro CLI)
       - name: Install Maestro CLI
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      # Run Maestro tests
-      - name: Run Maestro Tests
-        continue-on-error: true
+      - name: Set up Android environment
+        uses: android-actions/setup-android@v3
+
+      - name: Start Android Emulator
         run: |
-          maestro test maestro_flows/flows.yaml --output report.xml
-          if [ ! -f report.xml ]; then
-            echo "⚠️ ERROR: report.xml was not generated!"
-            exit 1
-          fi
+          echo "Starting Android Emulator..."
+          nohup emulator -avd test -no-snapshot-save -noaudio -no-window -gpu swiftshader_indirect -no-boot-anim &
+          adb wait-for-device
+          adb shell settings put global window_animation_scale 0
+          adb shell settings put global transition_animation_scale 0
+          adb shell settings put global animator_duration_scale 0
+        timeout-minutes: 5
 
-      # Debug: List files in the workspace
-      - name: Debug - List Files
-        run: ls -R
+      - name: Verify Emulator is Running
+        run: adb devices
 
-      # Upload the test results
+      - name: Run Maestro Tests
+        run: maestro test maestro_flows/flows.yaml --output report.xml
+
       - name: Upload Maestro Test Report
         uses: actions/upload-artifact@v4
         with:
           name: maestro-report
-          path: report.xml
-
-      - name: Check if report.xml exists
-        run: |
-          if [ -f report.xml ]; then
-            echo "✅ report.xml found!"
-          else
-            echo "❌ report.xml NOT found!"
-            exit 1
-          fi
-
-      # Optional: Annotate failures in the pull request
-      - name: Upload Test Results to GitHub
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const fs = require('fs');
-            const results = fs.readFileSync('report.xml', 'utf8');
-            console.log(`Test Report:\n${results}`);
+          path: ./report.xml
