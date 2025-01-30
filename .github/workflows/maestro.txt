@@ -1,0 +1,65 @@
+name: Run Maestro Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  maestro-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java (required for Android tools)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      # Step 3: Set up Android SDK
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 30          # Define Android API Level
+          target: default        # Use default target
+          arch: x86_64           # Use x86_64 architecture for emulator
+          profile: default       # Default profile
+          emulator-options: "-no-snapshot -no-window -gpu swiftshader_indirect"
+
+      # Step 4: Start the Android emulator
+      - name: Start Emulator
+        run: |
+          adb devices
+          adb wait-for-device
+          adb shell settings put global window_animation_scale 0
+          adb shell settings put global transition_animation_scale 0
+          adb shell settings put global animator_duration_scale 0
+
+      # Step 5: Install Maestro CLI
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      # Step 6: Verify Emulator is Running
+      - name: Verify Emulator is Running
+        run: adb devices
+
+      # Step 7: Run Maestro Tests
+      - name: Run Maestro Tests
+        run: maestro test maestro_flows/flows.yaml --output report.xml
+
+      # Step 8: Upload Maestro Test Report
+      - name: Upload Maestro Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-report
+          path: ./report.xml
