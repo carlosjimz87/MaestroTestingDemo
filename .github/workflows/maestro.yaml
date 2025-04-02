@@ -1,0 +1,50 @@
+name: Maestro E2E with Flashlight
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  maestro-flashlight:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Build APK
+        run: ./gradlew assembleDebug
+
+      - name: 📥 Install Maestro CLI
+        run: |
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: 📥 Install Flashlight CLI
+        run: |
+          curl -fsSL https://get.flashlight.mobile.dev | bash
+          echo "$HOME/.flashlight/bin" >> $GITHUB_PATH
+
+      - name: 🚀 Upload and Run Tests on Flashlight
+        run: |
+          flashlight test \
+            --api-key "${{ secrets.FLASHLIGHT_API_KEY }}" \
+            --app app/build/outputs/apk/debug/app-debug.apk \
+            --flow maestro_flows/flows.yaml \
+            --json > flashlight_result.json
+          
+      - name: 🧾 Generate GitHub Pages HTML
+        run: |
+          REPORT_URL=$(jq -r '.url' flashlight_result.json)
+          echo "<html><head><title>Maestro Test Report</title></head><body>" > index.html
+          echo "<h1>🚀 Maestro Test Report</h1>" >> index.html
+          echo "<p><a href='$REPORT_URL' target='_blank'>View Flashlight Report</a></p>" >> index.html
+          echo "</body></html>" >> index.html
+
+      - name: 📤 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
