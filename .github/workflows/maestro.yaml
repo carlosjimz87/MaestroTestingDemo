@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: cimg/android:2023.10
+      image: cimg/android:2025.04.1-node
 
     steps:
       - name: 👅 Checkout code
@@ -28,19 +28,19 @@ jobs:
       - name: 🛠️ Install Android Emulator
         run: |
           yes | sdkmanager --update
-          yes | sdkmanager "platform-tools" "platforms;android-34" "emulator" "system-images;android-34;google_apis;x86_64"
+          yes | sdkmanager "platform-tools" "platforms;android-30" "emulator" "system-images;android-30;google_apis;arm64-v8a"
 
       - name: 🚀 Create Android AVD
         run: |
           mkdir -p $HOME/.android/avd
           export ANDROID_AVD_HOME=$HOME/.android/avd
-          echo "no" | avdmanager create avd -n test-emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel" --force
+          echo "no" | avdmanager create avd -n test-emulator -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
 
       - name: 🚀 Start Emulator & Wait for Boot
         run: |
           export ANDROID_AVD_HOME=$HOME/.android/avd
           $ANDROID_HOME/emulator/emulator -avd test-emulator -no-window -no-snapshot -no-audio -no-boot-anim &
-          timeout 300 adb wait-for-device || { echo "❌ Emulator failed to start!"; exit 1; }
+          timeout 600 adb wait-for-device || { echo "❌ Emulator failed to start!"; exit 1; }
           adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
 
       - name: 🛠️ Install Maestro CLI
