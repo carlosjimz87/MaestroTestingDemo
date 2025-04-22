@@ -8,6 +8,12 @@ config:
 ---
 - launchApp:
     clearState: true
+
 - runFlow: login2home.yaml
+- assertVisible: "Home Screen"
+
 - runFlow: home2details.yaml
+- assertVisible: "Details for Item 2"
+
 - runFlow: details2delayedOp.yaml
+- assertVisible: "Delayed Operation Completed"
