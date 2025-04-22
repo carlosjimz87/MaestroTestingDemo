@@ -1,9 +1,18 @@
 appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
 
 ---
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 10000
+
 - tapOn: "Username"
 - inputText: "carlos"
+
 - tapOn: "Password"
 - inputText: "1234"
+
 - tapOn: "Login"
-- assertVisible: "Home Screen"
+
+- extendedWaitUntil:
+    visible: "Home Screen"
+    timeout: 10000

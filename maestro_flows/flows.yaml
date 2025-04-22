@@ -2,7 +2,7 @@ appId: com.carlosjimz87.maestrotestingdemo  # Define appId at the top
 
 config:
   defaultTimeout: 300
-  animationSpeed: 3.0
+  animationSpeed: 1.0
   interactionSpeed: 0
 
 ---
