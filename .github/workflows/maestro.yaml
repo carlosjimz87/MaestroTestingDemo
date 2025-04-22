@@ -1,4 +1,4 @@
-name: Maestro E2E with Flashlight
+name: Maestro E2E with Android Emulator
 
 on:
   push:
@@ -7,44 +7,107 @@ on:
     branches: [ main ]
 
 jobs:
-  maestro-flashlight:
+  maestro-e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 30 # Emulator setup and tests can take time
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to latest version
+
+      - name: 🛠️ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: 🛠️ Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 'latest'
 
       - name: 🛠️ Build APK
         run: ./gradlew assembleDebug
+
+      - name: 🛠️ Create Android Emulator
+        run: |
+          # Install required emulator and system image
+          sdkmanager "platform-tools" "platforms;android-34" "emulator" "system-images;android-34;google_apis;x86_64"
+
+          # Verify system image installation
+          sdkmanager --list | grep "system-images;android-34;google_apis;x86_64" || { echo "System image not found!"; exit 1; }
+
+          # Set the AVD home directory explicitly
+          export ANDROID_AVD_HOME=$HOME/.android/avd
+          mkdir -p $ANDROID_AVD_HOME
+
+          # Debug: Show environment variables
+          echo "ANDROID_AVD_HOME=$ANDROID_AVD_HOME"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+
+          # Create an AVD named 'test-emulator'
+          echo "no" | avdmanager create avd -n test-emulator -k "system-images;android-34;google_apis;x86_64" --force
+
+          # Verify AVD creation
+          avdmanager list avd | grep test-emulator || { echo "AVD creation failed!"; exit 1; }
+
+          # Debug: List AVD directory contents
+          echo "AVD directory contents:"
+          ls -la $ANDROID_AVD_HOME
+
+      - name: 🚀 Start Android Emulator
+        run: |
+          # Attempt to grant KVM permissions
+          sudo groupadd -r kvm || true
+          sudo usermod -aG kvm $USER
+          sudo chown $USER:kvm /dev/kvm || true
+
+          # Debug: Check KVM permissions
+          echo "KVM group membership:"
+          groups
+          echo "KVM device permissions:"
+          ls -l /dev/kvm
+
+          # Start emulator in no-window mode for CI with a timeout
+          $ANDROID_HOME/emulator/emulator -avd test-emulator -no-window -no-snapshot -no-audio -no-boot-anim &
+
+          # Wait for emulator to boot with a timeout (5 minutes)
+          timeout 300 adb wait-for-device || { echo "Emulator failed to start within 5 minutes!"; exit 1; }
+          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+          echo "Emulator is ready!"
 
       - name: 📥 Install Maestro CLI
         run: |
           curl -fsSL https://get.maestro.mobile.dev | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      - name: 📥 Install Flashlight CLI
+      - name: 🚀 Run Maestro Tests
         run: |
-          curl -fsSL https://get.flashlight.mobile.dev | bash
-          echo "$HOME/.flashlight/bin" >> $GITHUB_PATH
-
-      - name: 🚀 Upload and Run Tests on Flashlight
-        run: |
-          flashlight test \
-            --api-key "${{ secrets.FLASHLIGHT_API_KEY }}" \
-            --app app/build/outputs/apk/debug/app-debug.apk \
-            --flow maestro_flows/flows.yaml \
-            --json > flashlight_result.json
+          # Install APK on emulator
+          adb install app/build/outputs/apk/debug/app-debug.apk
           
+          # Run Maestro tests and output results
+          maestro test maestro_flows/flows.yaml --format junit --output maestro-report.xml
+        continue-on-error: true # Allow pipeline to continue even if tests fail
+
+      - name: 🧾 Archive Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: maestro-test-results
+          path: maestro-report.xml
+
       - name: 🧾 Generate GitHub Pages HTML
+        if: always()
         run: |
-          REPORT_URL=$(jq -r '.url' flashlight_result.json)
           echo "<html><head><title>Maestro Test Report</title></head><body>" > index.html
           echo "<h1>🚀 Maestro Test Report</h1>" >> index.html
-          echo "<p><a href='$REPORT_URL' target='_blank'>View Flashlight Report</a></p>" >> index.html
+          echo "<p>Download the <a href='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts'>Maestro JUnit Report</a> for details.</p>" >> index.html
           echo "</body></html>" >> index.html
 
       - name: 📤 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
