@@ -57,23 +57,21 @@ jobs:
 
       - name: 🚀 Start Android Emulator
         run: |
-          # Attempt to grant KVM permissions
           sudo groupadd -r kvm || true
           sudo usermod -aG kvm $USER
           sudo chown $USER:kvm /dev/kvm || true
 
-          # Debug: Check KVM permissions
-          echo "KVM group membership:"
-          groups
-          echo "KVM device permissions:"
-          ls -l /dev/kvm
+          export AVD_ARGS="-skin 480x800"
 
-          # Start emulator in no-window mode for CI with a timeout
-          $ANDROID_HOME/emulator/emulator -avd test-emulator -no-window -no-snapshot -no-audio -no-boot-anim &
+          $ANDROID_HOME/emulator/emulator -avd test-emulator $AVD_ARGS -no-window -no-snapshot -no-audio -no-boot-anim &
 
-          # Wait for emulator to boot with a timeout (5 minutes)
           timeout 300 adb wait-for-device || { echo "Emulator failed to start within 5 minutes!"; exit 1; }
           adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+
+          adb shell setprop persist.sys.language en
+          adb shell setprop persist.sys.country US
+          adb shell ctl.restart zygote
+
           echo "Emulator is ready!"
 
       - name: 📥 Install Maestro CLI
@@ -98,6 +96,17 @@ jobs:
           echo "🚀 Running Maestro tests..."
           ~/.maestro/bin/maestro test maestro_flows/flows.yaml --format junit --output maestro-report.xml
         continue-on-error: true
+
+      - name: 📸 Capture Emulator Screenshot on Failure
+        if: failure()
+        run: adb exec-out screencap -p > screenshot.png || true
+
+      - name: 📄 Upload Screenshot Artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: emulator-screenshot
+          path: screenshot.png
 
       - name: 🧾 Archive Test Results
         uses: actions/upload-artifact@v4
