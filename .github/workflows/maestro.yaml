@@ -11,32 +11,53 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
-      image: amrka/android-emulator
+      image: cimg/android:2023.10
 
     steps:
       - name: 👅 Checkout code
         uses: actions/checkout@v4
 
+      - name: 🛠️ Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils unzip zip
+
       - name: 🚀 Build APK
         run: ./gradlew assembleDebug
+
+      - name: 🛠️ Install Android Emulator
+        run: |
+          yes | sdkmanager --update
+          yes | sdkmanager "platform-tools" "platforms;android-34" "emulator" "system-images;android-34;google_apis;x86_64"
+
+      - name: 🚀 Create Android AVD
+        run: |
+          mkdir -p $HOME/.android/avd
+          export ANDROID_AVD_HOME=$HOME/.android/avd
+          echo "no" | avdmanager create avd -n test-emulator -k "system-images;android-34;google_apis;x86_64" --device "pixel" --force
+
+      - name: 🚀 Start Emulator & Wait for Boot
+        run: |
+          export ANDROID_AVD_HOME=$HOME/.android/avd
+          $ANDROID_HOME/emulator/emulator -avd test-emulator -no-window -no-snapshot -no-audio -no-boot-anim &
+          timeout 300 adb wait-for-device || { echo "❌ Emulator failed to start!"; exit 1; }
+          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
 
       - name: 🛠️ Install Maestro CLI
         run: |
           curl -fsSL https://get.maestro.mobile.dev | bash
           mv ~/.maestro/bin/maestro /usr/local/bin
 
-      - name: 🚀 Start Emulator & Run Maestro Tests
+      - name: 🚀 Run Maestro Tests
         run: |
-          emulator -avd test -no-window -no-snapshot -no-audio -no-boot-anim &
-          timeout 300 adb wait-for-device || { echo "❌ Emulator failed to start!"; exit 1; }
-          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-          echo "✅ Emulator is ready!"
+          echo "✅ Verifying APK path..."
+          ls -lh app/build/outputs/apk/debug/app-debug.apk || { echo "❌ APK not found!"; exit 1; }
 
-          echo "📱 Installing APK..."
+          echo "📱 Installing APK on emulator..."
           adb install app/build/outputs/apk/debug/app-debug.apk || { echo "❌ Failed to install APK"; exit 1; }
 
-          echo "🔍 Verifying package installed..."
-          adb shell pm list packages | grep ${{ secrets.PACKAGE_NAME }} || { echo "❌ App not installed"; exit 1; }
+          echo "🔍 Checking installed packages..."
+          adb shell pm list packages | grep ${{ secrets.PACKAGE_NAME }} || { echo "❌ App not installed!"; exit 1; }
 
           echo "🚀 Running Maestro tests..."
           maestro test maestro_flows/flows.yaml --format junit --output maestro-report.xml
