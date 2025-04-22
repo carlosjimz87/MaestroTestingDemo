@@ -1,4 +1,4 @@
-name: Maestro E2E with Android Emulator
+name: Maestro E2E with Docker Android Emulator
 
 on:
   push:
@@ -10,58 +10,64 @@ jobs:
   maestro-e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container:
-      image: cimg/android:2025.04.1-node
+    services:
+      emulator:
+        image: budtmo/docker-android:emulator_11.0
+        ports:
+          - 6080:6080
+          - 5554:5554
+          - 5555:5555
+        options: >-
+          --privileged
+          --device /dev/kvm
+          -e EMULATOR_DEVICE="Samsung Galaxy S10"
+          -e WEB_VNC=true
+          -e APPIUM=false
+          -e AUTO_RECORD=false
+          -e ENFORCE_DEV_MODE=false
 
     steps:
       - name: 👅 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🛠️ Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils unzip zip
-
       - name: 🚀 Build APK
         run: ./gradlew assembleDebug
 
-      - name: 🛠️ Install Android Emulator
+      - name: 🧰 Install Maestro CLI
         run: |
-          yes | sdkmanager --update
-          yes | sdkmanager "platform-tools" "platforms;android-30" "emulator" "system-images;android-30;google_apis;arm64-v8a"
+          curl -Ls https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      - name: 🚀 Create Android AVD
+      - name: 🧰 Install ADB
         run: |
-          mkdir -p $HOME/.android/avd
-          export ANDROID_AVD_HOME=$HOME/.android/avd
-          echo "no" | avdmanager create avd -n test-emulator -k "system-images;android-30;google_apis;arm64-v8a" --device "pixel" --force
+          sudo apt-get update
+          sudo apt-get install -y android-tools-adb
 
-      - name: 🚀 Start Emulator & Wait for Boot
+      - name: 🛠️ Wait for Emulator
         run: |
-          export ANDROID_AVD_HOME=$HOME/.android/avd
-          $ANDROID_HOME/emulator/emulator -avd test-emulator -no-window -no-snapshot -no-audio -no-boot-anim &
-          timeout 600 adb wait-for-device || { echo "❌ Emulator failed to start!"; exit 1; }
-          adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-
-      - name: 🛠️ Install Maestro CLI
-        run: |
-          curl -fsSL https://get.maestro.mobile.dev | bash
-          mv ~/.maestro/bin/maestro /usr/local/bin
+          adb connect localhost:5555
+          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
+          echo "Using emulator: $DEVICE_ID"
+          adb -s $DEVICE_ID wait-for-device
+          adb -s $DEVICE_ID shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+          adb -s $DEVICE_ID shell input keyevent 82
 
       - name: 🚀 Run Maestro Tests
         run: |
+          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
+          echo "Using emulator: $DEVICE_ID"
+
           echo "✅ Verifying APK path..."
           ls -lh app/build/outputs/apk/debug/app-debug.apk || { echo "❌ APK not found!"; exit 1; }
 
           echo "📱 Installing APK on emulator..."
-          adb install app/build/outputs/apk/debug/app-debug.apk || { echo "❌ Failed to install APK"; exit 1; }
+          adb -s $DEVICE_ID install app/build/outputs/apk/debug/app-debug.apk || { echo "❌ Failed to install APK"; exit 1; }
 
           echo "🔍 Checking installed packages..."
-          adb shell pm list packages | grep ${{ secrets.PACKAGE_NAME }} || { echo "❌ App not installed!"; exit 1; }
+          adb -s $DEVICE_ID shell pm list packages | grep ${{ secrets.PACKAGE_NAME }} || { echo "❌ App not installed!"; exit 1; }
 
           echo "🚀 Running Maestro tests..."
           maestro test maestro_flows/flows.yaml --format junit --output maestro-report.xml
-        continue-on-error: true
 
       - name: 📸 Capture Emulator Screenshot on Failure
         if: failure()

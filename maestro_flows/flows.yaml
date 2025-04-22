@@ -1,4 +1,4 @@
-appId: com.carlosjimz87.maestrotestingdemo  # Define appId at the top
+appId: com.carlosjimz87.maestrotestingdemo
 
 config:
   defaultTimeout: 300
