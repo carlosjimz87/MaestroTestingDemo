@@ -1,8 +1,0 @@
-appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
-
----
-- tapOn:
-    text: "Item.*"
-    index: 1
-- waitForAnimationToEnd
-- assertVisible: "Details for Item 2"

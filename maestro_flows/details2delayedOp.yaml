@@ -1,9 +1,0 @@
-appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
-
----
-- waitForAnimationToEnd
-- back
-- tapOn: "Run"
-- extendedWaitUntil:
-    visible: "Delayed Operation Completed"
-    timeout: 3000

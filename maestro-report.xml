@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="emulator-5554" tests="1" failures="0" time="42">
-    <testcase id="flows" name="flows" classname="flows" time="42" status="SUCCESS"/>
+  <testsuite name="Test Suite" device="emulator-5554" tests="1" failures="0" time="41">
+    <testcase id="flows" name="flows" classname="flows" time="41" status="SUCCESS"/>
   </testsuite>
 </testsuites>
