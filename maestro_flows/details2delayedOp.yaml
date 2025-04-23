@@ -7,3 +7,5 @@ appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
 - extendedWaitUntil:
     visible: "Delayed Operation Completed"
     timeout: 3000
+
+- takeScreenshot: screenshots/details2delayedOp

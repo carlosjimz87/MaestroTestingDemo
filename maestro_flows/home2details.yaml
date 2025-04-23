@@ -6,3 +6,5 @@ appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
     index: 1
 - waitForAnimationToEnd
 - assertVisible: "Details for Item 2"
+
+- takeScreenshot: screenshots/home2details

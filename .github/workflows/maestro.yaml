@@ -55,53 +55,37 @@ jobs:
           adb -s $DEVICE_ID shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
           adb -s $DEVICE_ID shell input keyevent 82
 
-      - name: 🚀 Run Maestro Tests
+      - name: 🧪 Run Maestro Tests and Capture Output
         run: |
-          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
-          echo "Using emulator: $DEVICE_ID"
-
-          echo "✅ Verifying APK path..."
-          ls -lh app/build/outputs/apk/debug/app-debug.apk || { echo "❌ APK not found!"; exit 1; }
-
-          echo "📱 Installing APK on emulator..."
-          adb -s $DEVICE_ID install app/build/outputs/apk/debug/app-debug.apk || { echo "❌ Failed to install APK"; exit 1; }
-
-          echo "🔍 Checking installed packages..."
-          adb -s $DEVICE_ID shell pm list packages | grep ${{ secrets.PACKAGE_NAME }} || { echo "❌ App not installed!"; exit 1; }
+          echo "🧹 Cleaning previous screenshots and report..."
+          rm -rf screenshots maestro-output.log maestro-report.xml results.json || true
+          mkdir -p screenshots
 
           echo "🚀 Running Maestro tests..."
-          maestro test maestro_flows/flows.yaml --format junit --output maestro-report.xml
+          maestro test maestro_flows/flows.yaml | tee maestro-output.log
 
-      - name: 📸 Capture Emulator Screenshot on Failure
-        if: failure()
-        run: adb exec-out screencap -p > screenshot.png || true
-
-      - name: 🧩 Create placeholder screenshot if none
-        if: success()
+      - name: 📂 Prepare GitHub Pages Output
+        if: always()
         run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          if [ ! -f screenshot.png ]; then
-            echo "Creating placeholder screenshot..."
-            convert -size 800x600 xc:white -gravity center -pointsize 24 -annotate 0 "✅ All tests passed" screenshot.png
-          fi
+          mkdir -p ./gh-pages/screenshots
+          cp -v screenshots/*.png ./gh-pages/screenshots/ || true
+          cp -v maestro-output.log ./gh-pages/ || true
 
-      - name: 📄 Generate GitHub Pages HTML
+      - name: 📄 Generate Report HTML
+        if: always()
         run: |
-          mkdir -p maestro-artifacts
-          echo "<html><head><title>Maestro Test Report</title></head><body>" > maestro-artifacts/index.html
-          echo "<h1>🚀 Maestro Test Report</h1>" >> maestro-artifacts/index.html
-          echo "<p>Download the <a href='maestro-report.xml'>Maestro JUnit Report</a> for details.</p>" >> maestro-artifacts/index.html
-          echo "<h2>📸 Emulator Screenshot</h2><img src='screenshot.png' style='max-width:100%; border:1px solid #ccc;'/>" >> maestro-artifacts/index.html
-          echo "</body></html>" >> maestro-artifacts/index.html
+          echo "<html><head><title>Maestro Test Report</title></head><body>" > ./gh-pages/index.html
+          echo "<h1>🚀 Maestro Test Report</h1>" >> ./gh-pages/index.html
+          echo "<p><a href='maestro-output.log'>📄 View Raw Log</a></p>" >> ./gh-pages/index.html
+          echo "<h2>📸 Screenshots</h2>" >> ./gh-pages/index.html
+          for img in ./gh-pages/screenshots/*.png; do
+            echo "<div><img src='screenshots/$(basename $img)' width='300'/></div>" >> ./gh-pages/index.html
+          done
+          echo "</body></html>" >> ./gh-pages/index.html
 
-      - name: 🧾 Copy test results and screenshot
-        run: |
-          cp maestro-report.xml maestro-artifacts/
-          cp screenshot.png maestro-artifacts/
-
-      - name: 📤 Deploy to GitHub Pages
+      - name: 📤 Deploy Maestro Report & Screenshots to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./maestro-artifacts
+          publish_dir: ./gh-pages

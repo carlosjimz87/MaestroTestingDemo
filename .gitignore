@@ -10,6 +10,7 @@ local.properties
 
 # Android Studio generated files and folders
 captures/
+screenshots/
 .externalNativeBuild/
 .cxx/
 *.apk
