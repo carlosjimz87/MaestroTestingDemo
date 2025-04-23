@@ -55,50 +55,43 @@ jobs:
           adb -s $DEVICE_ID shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
           adb -s $DEVICE_ID shell input keyevent 82
 
-      - name: 🧪 Install and Run Maestro Tests
+      - name: 📱 Install APK
         run: |
-          echo "📱 Installing APK..."
-          adb install -r app/build/outputs/apk/debug/app-debug.apk
+          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
+          adb -s $DEVICE_ID install -r app/build/outputs/apk/debug/app-debug.apk
 
-          echo "🔍 Verifying installation..."
-          adb shell pm list packages | grep com.carlosjimz87.maestrotestingdemo || { echo "❌ App not installed!"; exit 1; }
-
-          echo "🧹 Cleaning screenshots and logs..."
-          rm -rf screenshots maestro-output.log
+      - name: 🧪 Run Maestro Tests and Capture Output
+        run: |
+          echo "🧹 Cleaning previous screenshots and logs..."
+          rm -rf screenshots maestro-output.log || true
           mkdir -p screenshots
 
           echo "🚀 Running Maestro tests..."
-          maestro test maestro_flows/flows.yaml > maestro-output.log 2>&1 || true  # no cortar por error
+          maestro test maestro_flows/flows.yaml | tee maestro-output.log
 
-          echo "📁 Moving screenshots..."
+          echo "📂 Moving screenshots..."
           mv *.png screenshots/ || true
 
-      - name: 📤 Upload Screenshots as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: maestro-screenshots
-          path: ./screenshots/*.png
-
-      - name: 🧾 Copy Artifacts to GitHub Pages Output
+      - name: 📂 Prepare GitHub Pages Output
         if: always()
         run: |
           mkdir -p ./gh-pages/screenshots
           cp -v screenshots/*.png ./gh-pages/screenshots/ || true
-          cp -v maestro-output.log ./gh-pages/
+          cp -v maestro-output.log ./gh-pages/ || true
 
-      - name: 📄 Generate index.html
+      - name: 📄 Generate Report HTML
         if: always()
         run: |
           echo "<html><head><title>Maestro Test Report</title></head><body>" > ./gh-pages/index.html
           echo "<h1>🚀 Maestro Test Report</h1>" >> ./gh-pages/index.html
-          echo "<p><a href='maestro-output.log'>📜 View Full Console Output</a></p>" >> ./gh-pages/index.html
+          echo "<p><a href='maestro-output.log'>📄 View Raw Log</a></p>" >> ./gh-pages/index.html
           echo "<h2>📸 Screenshots</h2>" >> ./gh-pages/index.html
           for img in ./gh-pages/screenshots/*.png; do
             echo "<div><img src='screenshots/$(basename $img)' width='300'/></div>" >> ./gh-pages/index.html
           done
           echo "</body></html>" >> ./gh-pages/index.html
 
-      - name: 📤 Deploy to GitHub Pages
+      - name: 📤 Deploy Maestro Report & Screenshots to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
