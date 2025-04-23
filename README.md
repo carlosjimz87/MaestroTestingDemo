@@ -11,7 +11,6 @@ This repository demonstrates how to use **Maestro** for automated UI testing of 
 - [Running Maestro Tests in CI/CD](#running-maestro-tests-in-cicd)
     - [GitHub Actions](#github-actions)
     - [Local Testing with act](#local-testing-with-act)
-- [Test Flows](#test-flows)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -61,14 +60,9 @@ This repository demonstrates how to use **Maestro** for automated UI testing of 
    maestro test maestro_flows/flows.yaml
    ```
 
-3. Run the test flows with report output:
+3. Run the test flows with a report output:
    ```bash
-   maestro test maestro_flows/flows.yaml --output report.xml
-   ```
-
-4. View the results:
-   ```bash
-   cat report.xml
+   maestro test maestro_flows/flows.yaml --output output-report.xml
    ```
 
 ---
@@ -100,22 +94,6 @@ If you want to simulate GitHub Actions locally:
    ```bash
    act -j maestro-tests --container-architecture linux/amd64
    ```
-
----
-
-## 🧪 Test Flows
-
-### Example Flows
-- **Navigation Test**:
-  Verifies navigation to the details page and back.
-- **Delayed Operation Test**:
-  Validates spinner visibility and success message after a delay.
-- **Login Test**:
-  Simulates user login with form filling and validation.
-
-### Directory Structure
-- `flows.yaml`: Main entry point for Maestro tests.
-- `login.yaml`, `home.yaml`, `details_view.yaml`: Modular flows for specific app areas.
 
 ---
 
