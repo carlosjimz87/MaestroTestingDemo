@@ -1,0 +1,19 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+config:
+  defaultTimeout: 300
+  animationSpeed: 1.0
+  interactionSpeed: 0
+
+---
+- launchApp:
+    clearState: true
+
+- runFlow: login2home.yaml
+- assertVisible: "Home Screen"
+
+- runFlow: home2details.yaml
+- assertVisible: "Details for Item 2"
+
+- runFlow: details2delayedOp.yaml
+- assertVisible: "Delayed Operation Completed"

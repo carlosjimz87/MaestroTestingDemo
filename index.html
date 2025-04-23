@@ -1,8 +1,84 @@
-<html><head><title>Maestro Test Report</title></head><body>
-<h1>🚀 Maestro Test Report</h1>
-<p><a href='maestro-output.log'>📄 View Raw Log</a></p>
-<h2>📸 Screenshots</h2>
-<div><img src='screenshots/details2delayedOp.png' width='300'/></div>
-<div><img src='screenshots/home2details.png' width='300'/></div>
-<div><img src='screenshots/login2home.png' width='300'/></div>
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maestro Test Report</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #f5f5f5;
+      color: #222;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    h2 {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+    }
+    pre {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .screenshot {
+      margin-bottom: 2rem;
+    }
+    .screenshot img {
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Maestro Test Report</h1>
+  <h2>🗋 Summary</h2>
+  <pre>
+CI detected, analytics was automatically enabled.
+To opt out, set MAESTRO_CLI_NO_ANALYTICS environment variable to any value before running Maestro.
+📱 Running on emulator-5554
+ > Flow flows
+🚀 Launch app "com.carlosjimz87.maestrotestingdemo" with clear state...Run login2home.yaml...
+Run login2home.yaml...
+  🔍 Assert that "Login" is visible... ✅ COMPLETED
+  👆 Tap on "Username"... ✅ COMPLETED
+  👆 Input text carlos... ✅ COMPLETED
+  👆 Tap on "Password"... ✅ COMPLETED
+  👆 Input text 1234... ✅ COMPLETED
+  👆 Tap on "Login"... ✅ COMPLETED
+  🔍 Assert that "Home Screen" is visible... ✅ COMPLETED
+  📸 Take screenshot screenshots/login2home...Run login2home.yaml... ⏳ RUNNING
+Run login2home.yaml... ⏳ RUNNING
+🔍 Assert that "Home Screen" is visible...Run home2details.yaml...
+Run home2details.yaml...
+  👆 Tap on "Item.*", Index: 1... ✅ COMPLETED
+  ⏱️ Wait for animation to end... ✅ COMPLETED
+  🔍 Assert that "Details for Item 2" is visible... ✅ COMPLETED
+  📸 Take screenshot screenshots/home2details...Run home2details.yaml... ⏳ RUNNING
+Run home2details.yaml... ⏳ RUNNING
+🔍 Assert that "Details for Item 2" is visible...Run details2delayedOp.yaml...
+Run details2delayedOp.yaml...
+  ⏱️ Wait for animation to end... ✅ COMPLETED
+  👆 Press back... ✅ COMPLETED
+  👆 Tap on "Run"... ✅ COMPLETED
+  🔍 Assert that "Delayed Operation Completed" is visible... ✅ COMPLETED
+  📸 Take screenshot screenshots/details2delayedOp...Run details2delayedOp.yaml... ⏳ RUNNING
+Run details2delayedOp.yaml... ⏳ RUNNING
+🔍 Assert that "Delayed Operation Completed" is visible... ✅ COMPLETED
+  </pre>
+  <h2>📸 Screenshots</h2>
+  <div class="screenshot-grid">
