@@ -79,21 +79,29 @@ jobs:
           cp -v screenshots/*.png ./gh-pages/screenshots/ || true
           cp -v maestro-output.log ./gh-pages/ || true
 
-      - name: 📄 Generate Report HTML
+      - name: 📄 Generate Pretty HTML Report
         if: always()
         run: |
-          echo "<html><head><title>Maestro Test Report</title></head><body>" > ./gh-pages/index.html
-          echo "<h1>🚀 Maestro Test Report</h1>" >> ./gh-pages/index.html
-          echo "<p><a href='maestro-output.log'>📄 View Raw Log</a></p>" >> ./gh-pages/index.html
-          echo "<h2>📸 Screenshots</h2>" >> ./gh-pages/index.html
-          for img in ./gh-pages/screenshots/*.png; do
-            echo "<div><img src='screenshots/$(basename $img)' width='300'/></div>" >> ./gh-pages/index.html
-          done
-          echo "</body></html>" >> ./gh-pages/index.html
+          echo '<html><head><meta charset="UTF-8"><title>Maestro Test Report</title>
+          <style>
+            body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; color: #222; }
+            h1 { font-size: 2rem; }
+            h2 { margin-top: 2rem; font-size: 1.5rem; }
+            pre { background: #fff; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; }
+            .screenshot { margin-bottom: 2rem; }
+            .screenshot img { border-radius: 0.5rem; border: 1px solid #ccc; max-width: 300px; display: block; margin-top: 0.5rem; }
+          </style></head><body>' > ./gh-pages/index.html
 
-      - name: 📤 Deploy Maestro Report & Screenshots to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: always()
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
+          echo '<h1>🚀 Maestro Test Report</h1>' >> ./gh-pages/index.html
+
+          echo '<h2>🗋 Summary</h2><pre>' >> ./gh-pages/index.html
+          cat maestro-output.log >> ./gh-pages/index.html
+          echo '</pre>' >> ./gh-pages/index.html
+
+          echo '<h2>📸 Screenshots</h2>' >> ./gh-pages/index.html
+          for img in ./gh-pages/screenshots/*.png; do
+            base=$(basename "$img" .png)
+            echo "<div class='screenshot'><strong>🔹 $base</strong><img src='screenshots/$base.png'/></div>" >> ./gh-pages/index.html
+          done
+
+          echo '</body></html>' >> ./gh-pages/index.html
