@@ -76,31 +76,32 @@ jobs:
         if: failure()
         run: adb exec-out screencap -p > screenshot.png || true
 
-      - name: 📄 Upload Screenshot Artifact
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: emulator-screenshot
-          path: screenshot.png
-
-      - name: 📟 Archive Test Results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: maestro-test-results
-          path: maestro-report.xml
-
-      - name: 📟 Generate GitHub Pages HTML
-        if: always()
+      - name: 🧩 Create placeholder screenshot if none
+        if: success()
         run: |
-          echo "<html><head><title>Maestro Test Report</title></head><body>" > index.html
-          echo "<h1>🚀 Maestro Test Report</h1>" >> index.html
-          echo "<p>Download the <a href='${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts'>Maestro JUnit Report</a> for details.</p>" >> index.html
-          echo "</body></html>" >> index.html
+          sudo apt-get update && sudo apt-get install -y imagemagick
+          if [ ! -f screenshot.png ]; then
+            echo "Creating placeholder screenshot..."
+            convert -size 800x600 xc:white -gravity center -pointsize 24 -annotate 0 "✅ All tests passed" screenshot.png
+          fi
 
-      - name: 📄 Deploy to GitHub Pages
+      - name: 📄 Generate GitHub Pages HTML
+        run: |
+          mkdir -p maestro-artifacts
+          echo "<html><head><title>Maestro Test Report</title></head><body>" > maestro-artifacts/index.html
+          echo "<h1>🚀 Maestro Test Report</h1>" >> maestro-artifacts/index.html
+          echo "<p>Download the <a href='maestro-report.xml'>Maestro JUnit Report</a> for details.</p>" >> maestro-artifacts/index.html
+          echo "<h2>📸 Emulator Screenshot</h2><img src='screenshot.png' style='max-width:100%; border:1px solid #ccc;'/>" >> maestro-artifacts/index.html
+          echo "</body></html>" >> maestro-artifacts/index.html
+
+      - name: 🧾 Copy test results and screenshot
+        run: |
+          cp maestro-report.xml maestro-artifacts/
+          cp screenshot.png maestro-artifacts/
+
+      - name: 📤 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./maestro-artifacts
