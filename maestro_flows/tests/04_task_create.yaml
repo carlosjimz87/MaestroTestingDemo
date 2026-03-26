@@ -43,6 +43,7 @@ appId: com.carlosjimz87.maestrotestingdemo
     element: "New Maestro Task"
     direction: DOWN
     timeout: 10000
+    speed: 100
 
 - assertVisible: "New Maestro Task"
 

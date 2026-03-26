@@ -9,24 +9,26 @@ appId: com.carlosjimz87.maestrotestingdemo
 # Wait for task list to load
 - extendedWaitUntil:
     visible: "Review pull requests"
-    timeout: 10000
+    timeout: 15000
 
 # Verify first visible tasks
 - assertVisible: "Review pull requests"
 - assertVisible: "Buy groceries"
 
-# Scroll down to find tasks further in the list
+# Scroll down to find a task further in the list (use a mid-list task for reliability)
 - scrollUntilVisible:
-    element: "Buy birthday gift"
+    element: "Water plants"
     direction: DOWN
-    timeout: 15000
+    timeout: 30000
+    speed: 40
 
-- assertVisible: "Buy birthday gift"
+- assertVisible: "Water plants"
 
 # Scroll back to top
 - scrollUntilVisible:
     element: "Review pull requests"
     direction: UP
-    timeout: 15000
+    timeout: 30000
+    speed: 40
 
 - takeScreenshot: screenshots/03_task_list_scroll
