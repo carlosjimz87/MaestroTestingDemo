@@ -2,13 +2,13 @@ Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environmen
 
 
 Waiting for flows to complete...
-[Passed] flows (53s)
+[Failed] flows (25s) (Assertion is false: "TaskFlow" is visible)
 
-1/1 Flow Passed in 53s
+1/1 Flow Failed
 
 
 Waiting for flows to complete...
-[Passed] ai_visual_check (39s)
+[Failed] ai_visual_check (27s) (Assertion is false: "TaskFlow" is visible)
 
-1/1 Flow Passed in 39s
+1/1 Flow Failed
 
