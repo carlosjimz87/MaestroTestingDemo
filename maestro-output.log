@@ -2,13 +2,13 @@ Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environmen
 
 
 Waiting for flows to complete...
-[Failed] flows (4m 20s) (No visible element found: "New Maestro Task")
+[Failed] flows (6m 48s) (Assertion is false: "Buy groceries" is not visible)
 
 1/1 Flow Failed
 
 
 Waiting for flows to complete...
-[Passed] ai_visual_check (1m)
+[Passed] ai_visual_check (58s)
 
-1/1 Flow Passed in 1m
+1/1 Flow Passed in 58s
 
