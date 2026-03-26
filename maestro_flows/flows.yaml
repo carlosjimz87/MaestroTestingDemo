@@ -11,9 +11,19 @@ config:
 
 - runFlow: login2home.yaml
 - assertVisible: "Home Screen"
+- assertWithAI:
+    assertion: "A home screen with a list of clickable items and a Run button, properly laid out"
+    optional: true
 
 - runFlow: home2details.yaml
 - assertVisible: "Details for Item 2"
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "A details screen with clearly visible text 'Details for Item 2' that is not clipped or overlapping"
+    optional: true
 
 - runFlow: details2delayedOp.yaml
 - assertVisible: "Delayed Operation Completed"
+- assertWithAI:
+    assertion: "A screen displaying 'Delayed Operation Completed' text, centered and fully visible"
+    optional: true

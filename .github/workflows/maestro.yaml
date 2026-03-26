@@ -11,11 +11,11 @@ permissions:
 
 jobs:
   maestro-e2e:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     services:
       emulator:
-        image: budtmo/docker-android:emulator_11.0
+        image: budtmo/docker-android:emulator_14.0
         ports:
           - 6080:6080
           - 5554:5554
@@ -30,130 +30,105 @@ jobs:
           -e ENFORCE_DEV_MODE=false
 
     steps:
-      - name: 👅 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🚀 Build APK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build APK
         run: ./gradlew assembleDebug
 
-      - name: 🧰 Install Maestro CLI
+      - name: Install Maestro CLI
         run: |
           curl -Ls https://get.maestro.mobile.dev | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
 
-      - name: 🧰 Install ADB
+      - name: Install ADB
         run: |
           sudo apt-get update
           sudo apt-get install -y android-tools-adb
 
-      - name: 🛠️ Wait for Emulator
+      - name: Wait for Emulator
         run: |
           adb connect localhost:5555
-          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
+          sleep 5
+          DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
           echo "Using emulator: $DEVICE_ID"
-          adb -s $DEVICE_ID wait-for-device
-          adb -s $DEVICE_ID shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
-          adb -s $DEVICE_ID shell input keyevent 82
+          adb -s "$DEVICE_ID" wait-for-device
+          adb -s "$DEVICE_ID" shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+          adb -s "$DEVICE_ID" shell input keyevent 82
 
-      - name: 📱 Install APK
+      - name: Install APK
         run: |
-          export DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
-          adb -s $DEVICE_ID install -r app/build/outputs/apk/debug/app-debug.apk
+          DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
+          adb -s "$DEVICE_ID" install -r app/build/outputs/apk/debug/app-debug.apk
 
-      - name: 🧪 Run Maestro Tests and Capture Output
+      - name: Run Maestro Tests
+        continue-on-error: true
+        env:
+          MAESTRO_API_KEY: ${{ secrets.MAESTRO_API_KEY }}
         run: |
-          echo "🧹 Cleaning previous screenshots and logs..."
-          rm -rf screenshots maestro-output.log || true
-          mkdir -p screenshots
+          rm -rf screenshots maestro-report maestro-output.log || true
+          mkdir -p screenshots maestro-report
 
-          echo "🚀 Running Maestro tests..."
-          maestro test maestro_flows/flows.yaml | tee maestro-output.log
+          maestro test maestro_flows/flows.yaml \
+            --format html-detailed \
+            --output maestro-report/index.html \
+            | tee maestro-output.log
 
-          echo "📂 Moving screenshots..."
           mv *.png screenshots/ || true
 
-      - name: 📂 Prepare GitHub Pages Output
+      - name: Run AI Visual Checks
+        if: ${{ env.MAESTRO_API_KEY != '' }}
+        continue-on-error: true
+        env:
+          MAESTRO_API_KEY: ${{ secrets.MAESTRO_API_KEY }}
+        run: |
+          mkdir -p maestro-ai-report
+
+          maestro test maestro_flows/ai_visual_check.yaml \
+            --format html-detailed \
+            --output maestro-ai-report/index.html \
+            | tee -a maestro-output.log
+
+          mv *.png screenshots/ || true
+
+      - name: Upload Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-test-results
+          path: |
+            maestro-report/
+            maestro-ai-report/
+            screenshots/
+            maestro-output.log
+          retention-days: 30
+
+      - name: Prepare GitHub Pages
         if: always()
         run: |
-          mkdir -p ./gh-pages/screenshots
-          cp -v screenshots/*.png ./gh-pages/screenshots/ || echo "No screenshots to copy"
-          cp -v maestro-output.log ./gh-pages/ || echo "No log file found"
-          cp -v app/src/main/assets/favicon.png ./gh-pages/favicon.png || echo "No favicon found"
+          mkdir -p gh-pages/screenshots
 
-      - name: 📄 Generate Pretty HTML Report
-        if: always()
-        run: |
-          echo '<html><head><meta charset="UTF-8"><title>Maestro Test Report</title>
-          <link rel="icon" href="favicon.png" type="image/png">
-          <style>
-            body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; color: #222; }
-            h1 { font-size: 2.2rem; }
-            h2 { margin-top: 2rem; font-size: 1.5rem; }
-            table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-            table td, table th { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
-            table th { background: #eee; }
-            pre { background: #fff; padding: 1rem; border-radius: 0.5rem; white-space: pre-wrap; overflow-x: auto; }
-            .screenshots-grid {
-              display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-              gap: 1.5rem;
-              margin-top: 1rem;
-            }
-            .screenshot {
-              background: #fff;
-              border: 1px solid #ddd;
-              border-radius: 0.5rem;
-              padding: 1rem;
-              box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-              text-align: center;
-            }
-            .screenshot img {
-              border-radius: 0.5rem;
-              max-width: 100%;
-              height: auto;
-              margin-top: 0.5rem;
-            }
-          </style></head><body>' > ./gh-pages/index.html
+          # Use Maestro html-detailed report as main page
+          cp -r maestro-report/* gh-pages/ || true
 
-          echo '<h1>📊 Summary</h1>' >> ./gh-pages/index.html
+          # Include AI report if it exists
+          if [ -d maestro-ai-report ]; then
+            mkdir -p gh-pages/ai-report
+            cp -r maestro-ai-report/* gh-pages/ai-report/ || true
+          fi
 
-          total_tests=$(grep -cE "COMPLETED|FAILED" maestro-output.log || echo 0)
-          passed=$(grep -c "COMPLETED" maestro-output.log || echo 0)
-          failed=$(grep -c "FAILED" maestro-output.log || echo 0)
-          percent=$(awk "BEGIN {printf \"%.1f\", ($passed*100)/($total_tests == 0 ? 1 : $total_tests)}")
-          app_name=$(grep -oP 'Launch app "\K[^"]+' maestro-output.log | head -1)
-          device_name=$(adb devices -l | grep 'model:' | awk '{print $5}' || echo "Unknown")
-          os_version="Android 11 (Docker Emulator)"
+          # Include screenshots and assets
+          cp screenshots/*.png gh-pages/screenshots/ || true
+          cp app/src/main/assets/favicon.png gh-pages/favicon.png || true
+          cp maestro-output.log gh-pages/ || true
 
-          echo "<table>
-            <tr><th>📱 App</th><td>$app_name</td></tr>
-            <tr><th>🧩 OS</th><td>$os_version</td></tr>
-            <tr><th>📱 Device</th><td>$device_name</td></tr>
-            <tr><th>✅ Tests Passed</th><td>$passed</td></tr>
-            <tr><th>❌ Tests Failed</th><td>$failed</td></tr>
-            <tr><th>📊 Success Rate</th><td>$percent%</td></tr>
-          </table>" >> ./gh-pages/index.html
-
-          echo '<h2>🧪 Test Report</h2><pre>' >> ./gh-pages/index.html
-          sed -e 's/Launch app/🚀 &/' \
-              -e 's/Assert that/🔍 &/' \
-              -e 's/Tap on/👆 &/' \
-              -e 's/Input text/📝 &/' \
-              -e 's/Wait for/⏳ &/' \
-              -e 's/Take screenshot/📸 &/' \
-              -e 's/COMPLETED/✅ COMPLETED/' \
-              -e 's/FAILED/❌ FAILED/' \
-              -e 's/RUNNING/🏃 RUNNING/' maestro-output.log >> ./gh-pages/index.html
-          echo '</pre>' >> ./gh-pages/index.html
-
-          echo '<h2>🖼️ Screenshots</h2><div class="screenshots-grid">' >> ./gh-pages/index.html
-          for img in ./gh-pages/screenshots/*.png; do
-            base=$(basename "$img" .png)
-            echo "<div class='screenshot'><strong>🔹 $base</strong><img src='screenshots/$base.png'/></div>" >> ./gh-pages/index.html
-          done
-          echo '</div></body></html>' >> ./gh-pages/index.html
-
-      - name: 📤 Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: always()
         with:

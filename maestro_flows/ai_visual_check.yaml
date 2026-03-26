@@ -1,0 +1,40 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+- launchApp:
+    clearState: true
+
+# Login flow
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 10000
+
+- tapOn: "Username"
+- inputText: "carlos"
+
+- tapOn: "Password"
+- inputText: "1234"
+
+- tapOn: "Login"
+
+- extendedWaitUntil:
+    visible: "Home Screen"
+    timeout: 10000
+
+# AI check on Home Screen
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "A home screen displaying a list of items (Item 1, Item 2, Item 3) and a Run button, all clearly visible and properly laid out"
+- takeScreenshot: screenshots/ai_home_check
+
+# Navigate to Details
+- tapOn:
+    text: "Item.*"
+    index: 1
+- waitForAnimationToEnd
+
+# AI check on Details - this is where the bug gets caught
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "A details screen showing 'Details for Item 2' with text fully visible, not clipped, truncated, or overlapping other elements"
+- takeScreenshot: screenshots/ai_details_check

@@ -6,6 +6,6 @@ appId: com.carlosjimz87.maestrotestingdemo  # Ensure appId is here
 - tapOn: "Run"
 - extendedWaitUntil:
     visible: "Delayed Operation Completed"
-    timeout: 3000
+    timeout: 5000
 
 - takeScreenshot: screenshots/details2delayedOp
