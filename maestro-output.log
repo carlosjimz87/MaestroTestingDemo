@@ -2,7 +2,7 @@ Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environmen
 
 
 Waiting for flows to complete...
-[Failed] flows (2m 50s) (No visible element found: "Buy birthday gift")
+[Failed] flows (4m 20s) (No visible element found: "New Maestro Task")
 
 1/1 Flow Failed
 
