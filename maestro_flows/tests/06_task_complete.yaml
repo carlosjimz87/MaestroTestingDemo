@@ -16,12 +16,11 @@ appId: com.carlosjimz87.maestrotestingdemo
 - assertVisible: "In Progress"
 
 # Toggle complete
-- tapOn:
-    id: "toggle_complete_button"
+- tapOn: "Mark Complete"
 
 - waitForAnimationToEnd
 
-# Verify we're back and task state changed
+# Verify we're back
 - assertVisible: "My Tasks"
 
 - takeScreenshot: screenshots/06_task_complete

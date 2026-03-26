@@ -4,7 +4,6 @@ config:
   defaultTimeout: 300000
 
 ---
-
 # Full AI-powered visual regression test suite
 # Requires MAESTRO_API_KEY environment variable
 
@@ -12,7 +11,7 @@ config:
 
 # === Task List Screen ===
 - extendedWaitUntil:
-    visible: "Review pull requests"
+    visible: 'Review pull requests'
     timeout: 10000
 
 - assertNoDefectsWithAI
@@ -22,7 +21,7 @@ config:
 - takeScreenshot: screenshots/ai_task_list
 
 # === Task Detail Screen ===
-- tapOn: "Review pull requests"
+- tapOn: 'Review pull requests'
 - waitForAnimationToEnd
 
 - assertNoDefectsWithAI
@@ -35,8 +34,7 @@ config:
 - back
 - waitForAnimationToEnd
 
-- tapOn:
-    id: "tab_profile"
+- tapOn: 'Profile'
 - waitForAnimationToEnd
 
 - assertNoDefectsWithAI
@@ -45,13 +43,12 @@ config:
 
 - takeScreenshot: screenshots/ai_profile
 
-- tapOn:
-    id: "stats_button"
+- tapOn: 'Task Statistics'
 - waitForAnimationToEnd
 
 - assertNoDefectsWithAI
 - assertWithAI:
-    assertion: "The statistics screen has three sections: a completion rate with a progress bar showing percentage, an overdue tasks count card, and a category breakdown with four colored horizontal bars for Work (blue), Personal (purple), Shopping (yellow), and Health (green). All text is readable and bars are properly aligned."
+    assertion: 'The statistics screen has three sections: a completion rate with a progress bar showing percentage, an overdue tasks count card, and a category breakdown with four colored horizontal bars for Work (blue), Personal (purple), Shopping (yellow), and Health (green). All text is readable and bars are properly aligned.'
 
 - takeScreenshot: screenshots/ai_stats
 
@@ -59,12 +56,11 @@ config:
 - back
 - waitForAnimationToEnd
 
-- tapOn:
-    id: "tab_search"
+- tapOn: 'Search'
 - waitForAnimationToEnd
 
 - assertNoDefectsWithAI
 - assertWithAI:
-    assertion: "The search screen has a text input field at the top with a search icon and placeholder text. Below shows a message to type to search. The bottom navigation bar is visible with the Search tab highlighted."
+    assertion: 'The search screen has a text input field at the top with a search icon and placeholder text. Below shows a message to type to search. The bottom navigation bar is visible with the Search tab highlighted.'
 
 - takeScreenshot: screenshots/ai_search

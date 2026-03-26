@@ -10,34 +10,29 @@ appId: com.carlosjimz87.maestrotestingdemo
     timeout: 10000
 
 # Tap FAB to add task
-- tapOn:
-    id: "add_task_fab"
+- tapOn: "Add Task"
 
 - waitForAnimationToEnd
 - assertVisible: "Add Task"
 
 # Fill in the form
-- tapOn:
-    id: "task_title_field"
+- tapOn: "Title"
 - inputText: "New Maestro Task"
 
-- tapOn:
-    id: "task_description_field"
+- tapOn: "Description"
 - inputText: "Created during E2E test run"
+- hideKeyboard
 
 # Select priority
-- tapOn:
-    id: "priority_dropdown"
+- tapOn: "Priority"
 - tapOn: "HIGH"
 
 # Select category
-- tapOn:
-    id: "category_dropdown"
+- tapOn: "Category"
 - tapOn: "Work"
 
 # Save
-- tapOn:
-    id: "save_task_button"
+- tapOn: "Save Task"
 
 - waitForAnimationToEnd
 

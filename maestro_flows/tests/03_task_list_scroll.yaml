@@ -11,7 +11,7 @@ appId: com.carlosjimz87.maestrotestingdemo
     visible: "Review pull requests"
     timeout: 10000
 
-# Verify first few visible tasks
+# Verify first visible tasks
 - assertVisible: "Review pull requests"
 - assertVisible: "Buy groceries"
 

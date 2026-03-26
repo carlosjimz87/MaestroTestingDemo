@@ -1,28 +1,26 @@
 appId: com.carlosjimz87.maestrotestingdemo
 
 env:
-  USERNAME: ${USERNAME:-carlos}
-  PASSWORD: ${PASSWORD:-1234}
+  USERNAME: carlos
+  PASSWORD: 1234
 
 ---
-
 - launchApp:
     clearState: true
 
-- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "TaskFlow"
+    timeout: 10000
 
-- assertVisible: "TaskFlow"
-
-- tapOn:
-    id: "username_field"
+- tapOn: "Username"
 - inputText: ${USERNAME}
 
-- tapOn:
-    id: "password_field"
+- tapOn: "Password"
 - inputText: ${PASSWORD}
 
-- tapOn:
-    id: "login_button"
+- hideKeyboard
+
+- tapOn: "Login"
 
 - extendedWaitUntil:
     visible: "My Tasks"

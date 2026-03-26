@@ -9,11 +9,14 @@ appId: com.carlosjimz87.maestrotestingdemo
     visible: "Review pull requests"
     timeout: 10000
 
-# Pull to refresh by swiping down on the task list
+# Pull to refresh from the first visible task item
+- assertVisible: "Review pull requests"
 - swipe:
-    direction: DOWN
-    from:
-      id: "task_list"
+      direction: DOWN
+      from:
+          text: "Review pull requests"
+      duration: 800
+      waitToSettleTimeoutMs: 2000
 
 # Wait for refresh to complete
 - extendedWaitUntil:

@@ -1,28 +1,23 @@
 appId: com.carlosjimz87.maestrotestingdemo
-
 ---
-
 - runFlow: ../subflows/login.yaml
 
 # Verify Tasks tab is active
 - assertVisible: "My Tasks"
 
 # Switch to Search tab
-- tapOn:
-    id: "tab_search"
+- tapOn: "Search"
 - waitForAnimationToEnd
 - assertVisible: "Search Tasks"
 
 # Switch to Profile tab
-- tapOn:
-    id: "tab_profile"
+- tapOn: "Profile"
 - waitForAnimationToEnd
 - assertVisible: "Profile"
 - assertVisible: "Carlos"
 
 # Switch back to Tasks tab
-- tapOn:
-    id: "tab_tasks"
+- tapOn: "Tasks"
 - waitForAnimationToEnd
 - assertVisible: "My Tasks"
 

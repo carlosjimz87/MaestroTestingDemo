@@ -2,18 +2,17 @@ appId: com.carlosjimz87.maestrotestingdemo
 
 ---
 
-- tapOn:
-    id: "tab_profile"
+- tapOn: "Profile"
 
 - assertVisible: "Profile"
 
-- tapOn:
-    id: "logout_button"
+- tapOn: "Logout"
 
 - assertVisible: "Are you sure you want to logout?"
 
 - tapOn:
-    id: "confirm_logout"
+    text: "Logout"
+    index: 1
 
 - extendedWaitUntil:
     visible: "TaskFlow"

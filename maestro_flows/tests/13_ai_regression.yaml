@@ -1,7 +1,5 @@
 appId: com.carlosjimz87.maestrotestingdemo
-
 ---
-
 - runFlow: ../subflows/login.yaml
 
 # Wait for list to load
@@ -33,12 +31,10 @@ appId: com.carlosjimz87.maestrotestingdemo
 - back
 - waitForAnimationToEnd
 
-- tapOn:
-    id: "tab_profile"
+- tapOn: "Profile"
 - waitForAnimationToEnd
 
-- tapOn:
-    id: "stats_button"
+- tapOn: "Task Statistics"
 - waitForAnimationToEnd
 
 # AI: Check stats screen for visual correctness
