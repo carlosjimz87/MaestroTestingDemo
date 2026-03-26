@@ -42,8 +42,8 @@ appId: com.carlosjimz87.maestrotestingdemo
 - scrollUntilVisible:
     element: "New Maestro Task"
     direction: DOWN
-    timeout: 10000
-    speed: 100
+    timeout: 30000
+    speed: 40
 
 - assertVisible: "New Maestro Task"
 
