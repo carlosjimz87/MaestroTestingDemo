@@ -14,7 +14,7 @@ val TealGrey40 = Color(0xFF4DB6AC)
 val Amber40 = Color(0xFFFF8F00)
 
 // Priority colors
-val PriorityHigh = Color(0xFFE53935)
+val PriorityHigh = Color(0xFF43A047)
 val PriorityMedium = Color(0xFFFB8C00)
 val PriorityLow = Color(0xFF43A047)
 
