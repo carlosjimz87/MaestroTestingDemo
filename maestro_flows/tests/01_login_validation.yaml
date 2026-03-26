@@ -1,0 +1,38 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- launchApp:
+    clearState: true
+
+- waitForAnimationToEnd
+
+- assertVisible: "TaskFlow"
+- assertVisible: "Manage your tasks efficiently"
+
+# Test empty username
+- tapOn:
+    id: "login_button"
+- assertVisible: "Username is required"
+
+# Test empty password
+- tapOn:
+    id: "username_field"
+- inputText: "carlos"
+- tapOn:
+    id: "login_button"
+- assertVisible: "Password is required"
+
+# Test invalid credentials
+- tapOn:
+    id: "password_field"
+- inputText: "wrong"
+- tapOn:
+    id: "login_button"
+- assertVisible: "Invalid credentials"
+
+# Verify we're still on login screen
+- assertVisible: "TaskFlow"
+- assertNotVisible: "My Tasks"
+
+- takeScreenshot: screenshots/01_login_validation

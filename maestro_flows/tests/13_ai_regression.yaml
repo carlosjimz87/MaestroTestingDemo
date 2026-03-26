@@ -1,0 +1,49 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# AI: Check task list screen for defects
+- assertNoDefectsWithAI
+
+# AI: Verify task list looks correct
+- assertWithAI:
+    assertion: "The screen shows a task list with task cards, each having a title, priority badge, category label, and a checkbox. There is a floating action button at the bottom right."
+
+- takeScreenshot: screenshots/13_ai_task_list
+
+# Navigate to a HIGH priority task detail
+- tapOn: "Review pull requests"
+- waitForAnimationToEnd
+
+# AI: Verify task detail screen
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "The task detail screen shows the task title, a HIGH priority badge in red color, description text, category and due date cards, and a status section."
+
+- takeScreenshot: screenshots/13_ai_task_detail
+
+# Go back and navigate to stats
+- back
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "tab_profile"
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "stats_button"
+- waitForAnimationToEnd
+
+# AI: Check stats screen for visual correctness
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "The statistics screen shows a completion progress bar, an overdue tasks count, and a category breakdown with colored horizontal bars for Work, Personal, Shopping, and Health."
+
+- takeScreenshot: screenshots/13_ai_stats

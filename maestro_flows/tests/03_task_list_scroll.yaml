@@ -1,0 +1,32 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+- assertVisible: "My Tasks"
+
+# Wait for task list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# Verify first few visible tasks
+- assertVisible: "Review pull requests"
+- assertVisible: "Buy groceries"
+
+# Scroll down to find tasks further in the list
+- scrollUntilVisible:
+    element: "Buy birthday gift"
+    direction: DOWN
+    timeout: 15000
+
+- assertVisible: "Buy birthday gift"
+
+# Scroll back to top
+- scrollUntilVisible:
+    element: "Review pull requests"
+    direction: UP
+    timeout: 15000
+
+- takeScreenshot: screenshots/03_task_list_scroll

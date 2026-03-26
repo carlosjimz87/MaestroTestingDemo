@@ -1,40 +1,70 @@
 appId: com.carlosjimz87.maestrotestingdemo
 
+config:
+  defaultTimeout: 300000
+
 ---
-- launchApp:
-    clearState: true
 
-# Login flow
+# Full AI-powered visual regression test suite
+# Requires MAESTRO_API_KEY environment variable
+
+- runFlow: subflows/login.yaml
+
+# === Task List Screen ===
 - extendedWaitUntil:
-    visible: "Login"
+    visible: "Review pull requests"
     timeout: 10000
 
-- tapOn: "Username"
-- inputText: "carlos"
-
-- tapOn: "Password"
-- inputText: "1234"
-
-- tapOn: "Login"
-
-- extendedWaitUntil:
-    visible: "Home Screen"
-    timeout: 10000
-
-# AI check on Home Screen
 - assertNoDefectsWithAI
 - assertWithAI:
-    assertion: "A home screen displaying a list of items (Item 1, Item 2, Item 3) and a Run button, all clearly visible and properly laid out"
-- takeScreenshot: screenshots/ai_home_check
+    assertion: "The screen displays a task management app with a top bar titled 'My Tasks', a scrollable list of task cards showing titles, priority badges (HIGH in red, MEDIUM in orange, LOW in green), category labels, and due dates. A floating action button with a plus icon is visible at the bottom right. The bottom navigation bar shows three tabs: Tasks, Search, and Profile."
 
-# Navigate to Details
-- tapOn:
-    text: "Item.*"
-    index: 1
+- takeScreenshot: screenshots/ai_task_list
+
+# === Task Detail Screen ===
+- tapOn: "Review pull requests"
 - waitForAnimationToEnd
 
-# AI check on Details - this is where the bug gets caught
 - assertNoDefectsWithAI
 - assertWithAI:
-    assertion: "A details screen showing 'Details for Item 2' with text fully visible, not clipped, truncated, or overlapping other elements"
-- takeScreenshot: screenshots/ai_details_check
+    assertion: "The task detail screen shows 'Review pull requests' as the title with a HIGH priority badge in RED color next to it. Below is a description card, then category and due date info cards side by side. A status section shows 'In Progress'. Two buttons at the bottom: 'Back' and 'Mark Complete'. No text is clipped or overlapping."
+
+- takeScreenshot: screenshots/ai_task_detail
+
+# === Navigate to Stats ===
+- back
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "tab_profile"
+- waitForAnimationToEnd
+
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "The profile screen shows a user card with name 'Carlos', a notifications toggle, and menu items for 'Task Statistics' and 'Settings'. A logout button is at the bottom."
+
+- takeScreenshot: screenshots/ai_profile
+
+- tapOn:
+    id: "stats_button"
+- waitForAnimationToEnd
+
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "The statistics screen has three sections: a completion rate with a progress bar showing percentage, an overdue tasks count card, and a category breakdown with four colored horizontal bars for Work (blue), Personal (purple), Shopping (yellow), and Health (green). All text is readable and bars are properly aligned."
+
+- takeScreenshot: screenshots/ai_stats
+
+# === Search Screen ===
+- back
+- waitForAnimationToEnd
+
+- tapOn:
+    id: "tab_search"
+- waitForAnimationToEnd
+
+- assertNoDefectsWithAI
+- assertWithAI:
+    assertion: "The search screen has a text input field at the top with a search icon and placeholder text. Below shows a message to type to search. The bottom navigation bar is visible with the Search tab highlighted."
+
+- takeScreenshot: screenshots/ai_search

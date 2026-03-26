@@ -1,115 +1,178 @@
-# Maestro Testing Demo
+# TaskFlow - Maestro Testing Demo
 
-This repository demonstrates how to use **Maestro** for automated UI testing of an Android application, featuring **AI-powered visual assertions** and a full **CI/CD pipeline** with Docker-based Android emulators and GitHub Pages reporting.
+A task manager Android app built with Jetpack Compose, designed to showcase **Maestro E2E testing** with AI-powered visual assertions, a full **CI/CD pipeline**, and **MCP integration** with Claude Code.
 
 ---
 
 ## Table of Contents
-- [Features](#features)
+- [The App](#the-app)
+- [Tech Stack](#tech-stack)
 - [Setup](#setup)
-- [Running Maestro Tests Locally](#running-maestro-tests-locally)
+- [Maestro Test Flows](#maestro-test-flows)
+- [Running Tests](#running-tests)
 - [AI-Powered Testing](#ai-powered-testing)
 - [MCP Integration (Claude Code)](#mcp-integration-claude-code)
-- [Running Maestro Tests in CI/CD](#running-maestro-tests-in-cicd)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Demo Branches](#demo-branches)
-- [Contributing](#contributing)
+- [Presentation Guide](#presentation-guide)
 - [License](#license)
 
 ---
 
-## Features
-- **Automated UI tests** using Maestro YAML flows
-- **AI-powered visual assertions** with `assertWithAI` and `assertNoDefectsWithAI`
-- Test flows for:
-    - Form filling and validation
-    - Navigation between screens
-    - Delayed operations with spinners
-    - Visual defect detection via LLM
-- **GitHub Actions workflow** with Docker Android emulator (Android 14)
-- **HTML detailed reports** via Maestro's built-in `html-detailed` formatter
-- **MCP integration** for interactive AI-assisted testing with Claude Code
-- Local CI/CD simulation using `act`
+## The App
+
+**TaskFlow** is a task management app with 8 screens and real-world UI patterns:
+
+| Screen | Features | Maestro Patterns |
+|--------|----------|-----------------|
+| **Login** | Form validation, snackbar errors | `inputText`, `assertVisible`, error states |
+| **Task List** | 24 tasks, pull-to-refresh, swipe-to-delete, FAB | `scroll`, `swipe`, `pullToRefresh` |
+| **Task Detail** | Priority badge, category, due date, toggle complete | Deep navigation, dynamic assertions |
+| **Add Task** | Form with dropdowns, validation | `tapOn` dropdown, form validation |
+| **Search** | Real-time filtering, clear button | `inputText`, `clearText`, filtered results |
+| **Profile** | Toggle switches, logout dialog | `Switch` toggle, `AlertDialog` interaction |
+| **Statistics** | Progress bars, category chart | AI visual assertions on charts |
+| **Settings** | Preferences, snackbar feedback | Toggle states, toast verification |
+
+Bottom navigation with 3 tabs: Tasks, Search, Profile.
+
+---
+
+## Tech Stack
+
+| Component | Version |
+|-----------|---------|
+| AGP | 9.1.0 |
+| Kotlin | 2.3.20 |
+| Compose BOM | 2026.03.00 |
+| Gradle | 9.3.1 |
+| compileSdk | 36 |
+| targetSdk | 35 |
+| Maestro CLI | Latest |
+| Docker Android | emulator_14.0 |
 
 ---
 
 ## Setup
-1. **Clone the repository**:
+
+1. **Clone**:
    ```bash
    git clone https://github.com/carlosjimz87/MaestroTestingDemo.git
    cd MaestroTestingDemo
    ```
 
-2. **Install Maestro CLI** (v2.3.0+):
+2. **Install Maestro CLI**:
    ```bash
    curl -fsSL "https://get.maestro.mobile.dev" | bash
-   ```
-
-3. **Verify installation**:
-   ```bash
    maestro --version
    ```
 
-For more details, see the [Maestro docs](https://docs.maestro.dev/).
+3. **Build the app**:
+   ```bash
+   ./gradlew assembleDebug
+   ```
+
+4. **Install on emulator/device**:
+   ```bash
+   adb install app/build/outputs/apk/debug/app-debug.apk
+   ```
 
 ---
 
-## Running Maestro Tests Locally
+## Maestro Test Flows
 
-1. Run the full test suite:
-   ```bash
-   maestro test maestro_flows/flows.yaml
-   ```
+13 test flows organized with reusable subflows:
 
-2. Run with HTML detailed report:
-   ```bash
-   maestro test maestro_flows/flows.yaml --format html-detailed --output report.html
-   ```
+```
+maestro_flows/
+  flows.yaml                    # Main orchestrator (12 flows)
+  ai_visual_check.yaml          # AI visual regression suite
+  subflows/
+    login.yaml                  # Reusable login subflow
+    logout.yaml                 # Reusable logout subflow
+  tests/
+    01_login_validation.yaml    # Empty fields, invalid creds, error messages
+    02_login_success.yaml       # Happy path login
+    03_task_list_scroll.yaml    # scrollUntilVisible through 24 items
+    04_task_create.yaml         # Fill form, save, verify in list
+    05_task_detail.yaml         # Navigate to detail, verify content
+    06_task_complete.yaml       # Toggle completion state
+    07_task_swipe_delete.yaml   # Swipe left to delete
+    08_search_filter.yaml       # Search, filter results, clear
+    09_profile_settings.yaml    # Toggles, settings, logout dialog
+    10_pull_to_refresh.yaml     # Pull-to-refresh gesture
+    11_navigation_tabs.yaml     # Bottom tab switching
+    12_form_validation.yaml     # Submit empty form, verify error
+    13_ai_regression.yaml       # AI catches visual bugs
+```
 
-3. Run the AI visual check flow:
-   ```bash
-   export MAESTRO_API_KEY=your_key_here
-   maestro test maestro_flows/ai_visual_check.yaml
-   ```
+### Maestro Features Demonstrated
+
+| Feature | Flows |
+|---------|-------|
+| `assertVisible` / `assertNotVisible` | All |
+| `scrollUntilVisible` | 03, 08 |
+| `swipe` (delete, refresh) | 07, 10 |
+| `inputText` / `clearText` | 01, 02, 04, 08 |
+| `runFlow` (subflow reuse) | All via login.yaml |
+| `assertWithAI` / `assertNoDefectsWithAI` | 13, ai_visual_check |
+| `extendedWaitUntil` | 02, 10 |
+| `env` variables | All login flows |
+| Dialog interaction | 07, 09, 12 |
+| `back` navigation | 05, 09 |
+
+---
+
+## Running Tests
+
+### Full suite
+```bash
+./run_maestro.sh
+```
+
+### Individual flow
+```bash
+./run_maestro.sh maestro_flows/tests/03_task_list_scroll.yaml
+```
+
+### With HTML report
+```bash
+maestro test maestro_flows/flows.yaml --format html-detailed --output report.html
+```
+
+### AI visual checks (requires API key)
+```bash
+export MAESTRO_API_KEY=your_key_here
+maestro test maestro_flows/ai_visual_check.yaml
+```
 
 ---
 
 ## AI-Powered Testing
 
-Maestro v2.2.0+ includes experimental AI commands that use LLMs to validate UI state:
-
 ### `assertWithAI`
-Validates visual UI state using natural language assertions:
+Natural language visual assertions:
 ```yaml
 - assertWithAI:
-    assertion: "A details screen showing 'Details for Item 2' with text fully visible"
-    optional: true
+    assertion: "The HIGH priority badge is displayed in RED color"
 ```
 
 ### `assertNoDefectsWithAI`
-Automatically detects common visual defects (overlapping text, clipped elements, rendering issues):
+Automatic visual defect detection (clipping, overlapping, rendering issues):
 ```yaml
 - assertNoDefectsWithAI
 ```
 
-### `extractTextWithAI`
-Extracts text from screenshots when standard selectors are unreliable:
-```yaml
-- extractTextWithAI: "the error message displayed"
-- inputText: ${aiOutput}
-```
-
-### Configuration
-AI assertions require a `MAESTRO_API_KEY` environment variable. For CI, add it as a GitHub Actions secret.
+AI assertions require `MAESTRO_API_KEY` environment variable.
 
 ---
 
 ## MCP Integration (Claude Code)
 
-Maestro v2.3.0 includes a built-in MCP (Model Context Protocol) server that allows AI assistants to interactively control devices and run tests.
+Maestro's built-in MCP server enables AI-assisted interactive testing.
 
-### Setup with Claude Code
-
-Add this to your `.claude/settings.json`:
+### Setup
+Add to `.mcp.json`:
 ```json
 {
   "mcpServers": {
@@ -121,13 +184,7 @@ Add this to your `.claude/settings.json`:
 }
 ```
 
-### What you can do
-- Ask Claude Code to take screenshots and analyze the UI
-- Tap elements, input text, and navigate the app via natural language
-- Run Maestro flows and inspect results interactively
-- Diagnose visual defects with AI-powered analysis
-
-### Available MCP Tools
+### Available Tools
 | Category | Tools |
 |----------|-------|
 | Device Control | `launch_app`, `stop_app`, `back`, `start_device`, `list_devices` |
@@ -135,53 +192,68 @@ Add this to your `.claude/settings.json`:
 | Flow Management | `run_flow`, `run_flow_files`, `check_flow_syntax` |
 | Documentation | `query_docs`, `cheat_sheet` |
 
+Use Claude Code to take screenshots, analyze UI, run flows, and generate new test flows interactively.
+
 ---
 
-## Running Maestro Tests in CI/CD
+## CI/CD Pipeline
 
-### GitHub Actions
-The pipeline uses [docker-android](https://github.com/budtmo/docker-android) (`emulator_14.0`) to run an Android 14 emulator in CI.
+GitHub Actions workflow with Docker Android emulator:
 
-1. **Add secrets** (optional, for AI features):
-   - `MAESTRO_API_KEY` — enables AI-powered assertions in CI
+1. **Build** - Gradle build with caching + lint check
+2. **Test** - Maestro E2E suite (12 traditional + AI visual checks)
+3. **Report** - GitHub Step Summary + HTML reports + GitHub Pages deployment
 
-2. **Push to trigger**:
-   ```bash
-   git push origin main
-   ```
+### Trigger
+Push or PR to `main` branch.
 
-3. **View results**:
-   - **Actions tab** — test logs and artifacts
-   - **GitHub Pages** — HTML detailed report with per-step execution details
+### View Results
+- **Actions tab** - Step summary with test results inline
+- **Artifacts** - Download full reports and screenshots (30-day retention)
+- **GitHub Pages** - Landing page with links to all reports and screenshot gallery
 
-### Local Testing with act
-```bash
-act -j maestro-e2e --container-architecture linux/amd64
-```
+### Secrets
+- `MAESTRO_API_KEY` (optional) - Enables AI-powered assertions in CI
 
 ---
 
 ## Demo Branches
 
-This repo is structured for a live talk demonstrating AI-powered test detection:
-
 | Branch | Description |
 |--------|-------------|
-| `main` | Clean version — all tests pass (traditional + AI) |
-| `demo/with-bug` | Contains a deliberate visual bug (clipped text on DetailsScreen) that traditional `assertVisible` passes but `assertNoDefectsWithAI` catches |
+| `main` | All tests pass (traditional + AI) |
+| `demo/with-bug` | Priority color bug (HIGH shows green instead of red) + text overflow. Traditional tests pass, AI catches the visual regression |
 
-### The Demo Narrative
-1. **Act 1** — Run traditional tests on `demo/with-bug`. They pass despite the visual bug.
-2. **Act 2** — Run AI visual checks. `assertNoDefectsWithAI` catches the clipped text.
-3. **Act 3** — Switch to `main` (bug fixed), run full pipeline, show the HTML report.
+### Presentation 3-Act Structure
+
+| Act | What | Branch |
+|-----|------|--------|
+| **Act 1: Setup** | Install Maestro, show CLI, explore Studio, walk through TaskFlow app | main |
+| **Act 2: The Bug** | Traditional tests pass on bugged branch, AI catches priority color bug | demo/with-bug |
+| **Act 3: Pipeline** | Fix bug, push, CI runs, show GitHub Pages report | main |
 
 ---
 
-## Contributing
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit your changes and push
-4. Submit a pull request
+## Presentation Guide
+
+### Phase 1: Installation & Config
+- Install Maestro CLI
+- Show `maestro --version` and `maestro studio`
+- Walk through the TaskFlow app on emulator
+- Show the Maestro flow YAML structure
+
+### Phase 2: CLI & Desktop Usage
+- Run individual flows: `maestro test maestro_flows/tests/03_task_list_scroll.yaml`
+- Run full suite with report: `./run_maestro.sh`
+- Open Maestro Studio for interactive exploration
+- Show MCP integration: Claude Code takes screenshots, analyzes UI, runs flows
+
+### Phase 3: Pipeline & Reports
+- Push to trigger CI pipeline
+- Show GitHub Actions with Docker emulator
+- View Step Summary in Actions tab
+- Navigate GitHub Pages report (landing page, Maestro report, AI report, screenshots)
+- Demo the `demo/with-bug` branch: AI catches what traditional tests miss
 
 ---
 

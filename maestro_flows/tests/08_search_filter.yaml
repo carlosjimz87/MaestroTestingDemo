@@ -1,0 +1,45 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Switch to Search tab
+- tapOn:
+    id: "tab_search"
+
+- waitForAnimationToEnd
+- assertVisible: "Search Tasks"
+- assertVisible: "Type to search your tasks"
+
+# Search for "review"
+- tapOn:
+    id: "search_field"
+- inputText: "review"
+
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 5000
+
+# Verify filtered results
+- assertVisible: "Review pull requests"
+- assertNotVisible: "Buy groceries"
+
+- takeScreenshot: screenshots/08_search_filter
+
+# Clear search
+- tapOn:
+    id: "clear_search"
+
+- assertVisible: "Type to search your tasks"
+
+# Search for something that doesn't exist
+- tapOn:
+    id: "search_field"
+- inputText: "xyznonexistent"
+
+- extendedWaitUntil:
+    visible: "No results found"
+    timeout: 5000
+
+- assertVisible: "No results found"

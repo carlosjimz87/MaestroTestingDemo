@@ -1,0 +1,23 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# Pull to refresh by swiping down on the task list
+- swipe:
+    direction: DOWN
+    from:
+      id: "task_list"
+
+# Wait for refresh to complete
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+- takeScreenshot: screenshots/10_pull_to_refresh

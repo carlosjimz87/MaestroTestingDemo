@@ -1,0 +1,54 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# Tap FAB to add task
+- tapOn:
+    id: "add_task_fab"
+
+- waitForAnimationToEnd
+- assertVisible: "Add Task"
+
+# Fill in the form
+- tapOn:
+    id: "task_title_field"
+- inputText: "New Maestro Task"
+
+- tapOn:
+    id: "task_description_field"
+- inputText: "Created during E2E test run"
+
+# Select priority
+- tapOn:
+    id: "priority_dropdown"
+- tapOn: "HIGH"
+
+# Select category
+- tapOn:
+    id: "category_dropdown"
+- tapOn: "Work"
+
+# Save
+- tapOn:
+    id: "save_task_button"
+
+- waitForAnimationToEnd
+
+# Verify we're back on the list and the new task exists
+- assertVisible: "My Tasks"
+
+- scrollUntilVisible:
+    element: "New Maestro Task"
+    direction: DOWN
+    timeout: 10000
+
+- assertVisible: "New Maestro Task"
+
+- takeScreenshot: screenshots/04_task_create

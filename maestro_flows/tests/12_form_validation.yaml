@@ -1,0 +1,27 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# Open add task screen
+- tapOn:
+    id: "add_task_fab"
+
+- waitForAnimationToEnd
+- assertVisible: "Add Task"
+
+# Try to save without title
+- tapOn:
+    id: "save_task_button"
+- assertVisible: "Title is required"
+
+# Verify we're still on the form
+- assertVisible: "Add Task"
+
+- takeScreenshot: screenshots/12_form_validation

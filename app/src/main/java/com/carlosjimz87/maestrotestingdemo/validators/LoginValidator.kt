@@ -6,16 +6,19 @@ sealed class LoginResult {
 }
 
 object LoginValidator {
-    fun validateCredentials(user:String, pass:String): LoginResult {
-        if(user.isEmpty() || pass.isEmpty()){
+    fun validate(user: String, pass: String): Boolean {
+        return user == "carlos" && pass == "1234"
+    }
+
+    fun validateCredentials(user: String, pass: String): LoginResult {
+        if (user.isEmpty() || pass.isEmpty()) {
             return LoginResult.Error("User or password are empty")
         }
 
-        if(user != "carlos" || pass != "1234"){
+        if (user != "carlos" || pass != "1234") {
             return LoginResult.Error("User or password are incorrect")
         }
 
         return LoginResult.Success
     }
-
 }

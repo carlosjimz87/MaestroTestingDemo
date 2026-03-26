@@ -1,0 +1,23 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Buy groceries"
+    timeout: 10000
+
+# Swipe left on "Buy groceries" to delete
+- swipe:
+    from:
+      text: "Buy groceries"
+    direction: LEFT
+
+- waitForAnimationToEnd
+
+# Verify item is gone
+- assertNotVisible: "Buy groceries"
+
+- takeScreenshot: screenshots/07_task_swipe_delete

@@ -1,0 +1,50 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Switch to Profile tab
+- tapOn:
+    id: "tab_profile"
+
+- waitForAnimationToEnd
+- assertVisible: "Profile"
+- assertVisible: "Carlos"
+
+# Toggle notifications
+- tapOn:
+    id: "notifications_toggle"
+
+# Navigate to settings
+- tapOn:
+    id: "settings_button"
+
+- waitForAnimationToEnd
+- assertVisible: "Settings"
+- assertVisible: "Dark Mode"
+- assertVisible: "Compact Mode"
+- assertVisible: "Show Completed Tasks"
+- assertVisible: "A demo app for Maestro E2E testing"
+
+# Toggle a setting
+- tapOn:
+    id: "dark_mode_toggle"
+- assertVisible: "Dark mode enabled"
+
+- takeScreenshot: screenshots/09_profile_settings
+
+# Go back to profile
+- back
+- waitForAnimationToEnd
+- assertVisible: "Profile"
+
+# Test logout dialog (cancel)
+- tapOn:
+    id: "logout_button"
+- assertVisible: "Are you sure you want to logout?"
+- tapOn:
+    id: "cancel_logout"
+
+# Verify still on profile
+- assertVisible: "Profile"

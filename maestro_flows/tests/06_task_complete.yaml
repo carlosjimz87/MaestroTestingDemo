@@ -1,0 +1,27 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+# Wait for list to load
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+# Navigate to first task detail
+- tapOn: "Review pull requests"
+
+- waitForAnimationToEnd
+- assertVisible: "In Progress"
+
+# Toggle complete
+- tapOn:
+    id: "toggle_complete_button"
+
+- waitForAnimationToEnd
+
+# Verify we're back and task state changed
+- assertVisible: "My Tasks"
+
+- takeScreenshot: screenshots/06_task_complete

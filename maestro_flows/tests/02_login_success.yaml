@@ -1,0 +1,14 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- runFlow: ../subflows/login.yaml
+
+- assertVisible: "My Tasks"
+
+# Verify task list is loaded
+- extendedWaitUntil:
+    visible: "Review pull requests"
+    timeout: 10000
+
+- takeScreenshot: screenshots/02_login_success

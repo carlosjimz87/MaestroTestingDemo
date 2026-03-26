@@ -1,29 +1,19 @@
 appId: com.carlosjimz87.maestrotestingdemo
 
 config:
-  defaultTimeout: 300
-  animationSpeed: 1.0
-  interactionSpeed: 0
+  defaultTimeout: 300000
 
 ---
-- launchApp:
-    clearState: true
 
-- runFlow: login2home.yaml
-- assertVisible: "Home Screen"
-- assertWithAI:
-    assertion: "A home screen with a list of clickable items and a Run button, properly laid out"
-    optional: true
-
-- runFlow: home2details.yaml
-- assertVisible: "Details for Item 2"
-- assertNoDefectsWithAI
-- assertWithAI:
-    assertion: "A details screen with clearly visible text 'Details for Item 2' that is not clipped or overlapping"
-    optional: true
-
-- runFlow: details2delayedOp.yaml
-- assertVisible: "Delayed Operation Completed"
-- assertWithAI:
-    assertion: "A screen displaying 'Delayed Operation Completed' text, centered and fully visible"
-    optional: true
+- runFlow: tests/01_login_validation.yaml
+- runFlow: tests/02_login_success.yaml
+- runFlow: tests/03_task_list_scroll.yaml
+- runFlow: tests/04_task_create.yaml
+- runFlow: tests/05_task_detail.yaml
+- runFlow: tests/06_task_complete.yaml
+- runFlow: tests/07_task_swipe_delete.yaml
+- runFlow: tests/08_search_filter.yaml
+- runFlow: tests/09_profile_settings.yaml
+- runFlow: tests/10_pull_to_refresh.yaml
+- runFlow: tests/11_navigation_tabs.yaml
+- runFlow: tests/12_form_validation.yaml

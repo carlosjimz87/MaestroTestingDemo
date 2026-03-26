@@ -35,3 +35,6 @@ google-services.json
 *.hprof
 *.secrets
 /.claude/
+maestro-report/
+maestro-ai-report/
+gh-pages/

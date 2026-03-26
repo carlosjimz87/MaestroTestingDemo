@@ -1,0 +1,20 @@
+appId: com.carlosjimz87.maestrotestingdemo
+
+---
+
+- tapOn:
+    id: "tab_profile"
+
+- assertVisible: "Profile"
+
+- tapOn:
+    id: "logout_button"
+
+- assertVisible: "Are you sure you want to logout?"
+
+- tapOn:
+    id: "confirm_logout"
+
+- extendedWaitUntil:
+    visible: "TaskFlow"
+    timeout: 5000
