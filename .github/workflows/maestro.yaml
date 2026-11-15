@@ -2,7 +2,7 @@ name: Maestro E2E with Docker Android Emulator
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, codex/maestro-ci-piloto ]
   pull_request:
     branches: [ main ]
 
@@ -52,8 +52,15 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Run Lint
-        continue-on-error: true
         run: ./gradlew lintDebug
+
+      - name: Upload QA APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-qa-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Install Maestro CLI
         run: |
@@ -256,7 +263,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        if: always()
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./gh-pages
