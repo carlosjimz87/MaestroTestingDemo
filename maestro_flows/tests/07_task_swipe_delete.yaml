@@ -9,11 +9,15 @@ appId: com.carlosjimz87.maestrotestingdemo
     visible: "Buy groceries"
     timeout: 10000
 
-# Swipe left on "Buy groceries" to delete
+# Start near the right edge of the containing row, rather than the title's
+# center, so the gesture crosses the swipe-to-dismiss distance threshold.
 - swipe:
     from:
-      text: "Buy groceries"
+      containsChild:
+        text: "Buy groceries"
+      point: "90%, 50%"
     direction: LEFT
+    duration: 600
 
 - waitForAnimationToEnd
 
