@@ -57,7 +57,7 @@ jobs:
       - name: Upload QA APK
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-qa-apk
+          name: maestro-qa-apk-${{ github.run_attempt }}
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
@@ -160,7 +160,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: maestro-test-results
+          name: maestro-test-results-${{ github.run_attempt }}
           path: |
             maestro-report/
             maestro-ai-report/
