@@ -4,6 +4,10 @@ shard="${1:?shard required}"
 mkdir -p evidence
 python3 ci/maestro/verify.py manifest evidence --shard "$shard"
 adb wait-for-device
+# Match the previous device logical viewport (480 x 1013 dp).
+# Pixel 2 default height lets the IME cover the unscrollable login fields.
+adb shell wm size 1080x2280
+adb shell wm density 360
 adb install -r qa-apk/app-debug.apk
 adb logcat -c
 if [ "$shard" = ai ]; then
