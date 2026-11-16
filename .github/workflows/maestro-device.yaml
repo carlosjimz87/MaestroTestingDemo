@@ -51,8 +51,8 @@ jobs:
           test -e /dev/kvm
           sudo chmod 666 /dev/kvm
           echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
-          sdkmanager "emulator" "platform-tools" > "$RUNNER_TEMP/sdk-install.log"
-          version=$("$ANDROID_HOME/emulator/emulator" -version | awk '/Android emulator version/ {print $4; exit}')
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "emulator" "platform-tools" > "$RUNNER_TEMP/sdk-install.log"
+          version=$(sed -n 's/^Pkg.Revision *= *//p' "$ANDROID_HOME/emulator/source.properties")
           test -n "$version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "home=$ANDROID_HOME" >> "$GITHUB_OUTPUT"
