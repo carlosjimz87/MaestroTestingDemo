@@ -2,13 +2,13 @@ Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environmen
 
 
 Waiting for flows to complete...
-[Failed] flows (6m 48s) (Assertion is false: "Buy groceries" is not visible)
+[Failed] flows (6m 36s) (Assertion is false: "Dark mode enabled" is visible)
 
 1/1 Flow Failed
 
 
 Waiting for flows to complete...
-[Passed] ai_visual_check (58s)
+[Passed] ai_visual_check (52s)
 
-1/1 Flow Passed in 58s
+1/1 Flow Passed in 52s
 

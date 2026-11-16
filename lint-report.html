@@ -177,20 +177,21 @@ document.getElementById(id).style.display = 'none';
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Lint Report: 48 errors and 16 warnings</span>
+      <span class="mdl-layout-title">Lint Report: 22 warnings</span>
       <div class="mdl-layout-spacer"></div>
-      <nav class="mdl-navigation mdl-layout--large-screen-only">Check performed at Thu Mar 26 20:15:46 UTC 2026 by AGP (9.1.0)</nav>
+      <nav class="mdl-navigation mdl-layout--large-screen-only">Check performed at Sun Nov 15 23:53:17 UTC 2026 by AGP (9.1.0)</nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Issue Types</span>
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="#overview"><i class="material-icons">dashboard</i>Overview</a>
-      <a class="mdl-navigation__link" href="#NewApi"><i class="material-icons error-icon">error</i>Calling new methods on older versions (48)</a>
       <a class="mdl-navigation__link" href="#OldTargetApi"><i class="material-icons warning-icon">warning</i>Target SDK attribute is not targeting latest version (1)</a>
-      <a class="mdl-navigation__link" href="#AndroidGradlePluginVersion"><i class="material-icons warning-icon">warning</i>Obsolete Android Gradle Plugin Version (1)</a>
-      <a class="mdl-navigation__link" href="#GradleDependency"><i class="material-icons warning-icon">warning</i>Obsolete Gradle Dependency (6)</a>
+      <a class="mdl-navigation__link" href="#AndroidGradlePluginVersion"><i class="material-icons warning-icon">warning</i>Obsolete Android Gradle Plugin Version (2)</a>
+      <a class="mdl-navigation__link" href="#GradleDependency"><i class="material-icons warning-icon">warning</i>Obsolete Gradle Dependency (8)</a>
+      <a class="mdl-navigation__link" href="#NewerVersionAvailable"><i class="material-icons warning-icon">warning</i>Newer Library Versions Available (2)</a>
       <a class="mdl-navigation__link" href="#UnusedResources"><i class="material-icons warning-icon">warning</i>Unused resources (8)</a>
+      <a class="mdl-navigation__link" href="#UseTomlInstead"><i class="material-icons warning-icon">warning</i>Use TOML Version Catalog Instead (1)</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
@@ -206,22 +207,27 @@ document.getElementById(id).style.display = 'none';
 <tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Correctness">Correctness</a>
 </td></tr>
 <tr>
-<td class="countColumn">48</td><td class="issueColumn"><i class="material-icons error-icon">error</i>
-<a href="#NewApi">NewApi</a>: Calling new methods on older versions</td></tr>
-<tr>
 <td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#OldTargetApi">OldTargetApi</a>: Target SDK attribute is not targeting latest version</td></tr>
 <tr>
-<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#AndroidGradlePluginVersion">AndroidGradlePluginVersion</a>: Obsolete Android Gradle Plugin Version</td></tr>
 <tr>
-<td class="countColumn">6</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<td class="countColumn">8</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#GradleDependency">GradleDependency</a>: Obsolete Gradle Dependency</td></tr>
+<tr>
+<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#NewerVersionAvailable">NewerVersionAvailable</a>: Newer Library Versions Available</td></tr>
 <tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Performance">Performance</a>
 </td></tr>
 <tr>
 <td class="countColumn">8</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#UnusedResources">UnusedResources</a>: Unused resources</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Productivity">Productivity</a>
+</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#UseTomlInstead">UseTomlInstead</a>: Use TOML Version Catalog Instead</td></tr>
 <tr><td></td><td class="categoryColumn"><a href="#ExtraIssues">Included Additional Checks (81)</a>
 </td></tr>
 <tr><td></td><td class="categoryColumn"><a href="#MissingIssues">Disabled Checks (43)</a>
@@ -234,530 +240,7 @@ Dismiss</button>            </div>
             </div>
           </section>
 <a name="Correctness"></a>
-<a name="NewApi"></a>
-<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="NewApiCard" style="display: block;">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">Calling new methods on older versions</h2>
-  </div>
-              <div class="mdl-card__supporting-text">
-<div class="issue">
-<div class="warningslist">
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:7</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  4 </span>
-<span class="lineno">  5 </span><span class="keyword">object</span> SampleData {
-<span class="lineno">  6 </span>    <span class="keyword">fun</span> getTasks(): List&lt;Task> = listOf(
-<span class="caretline"><span class="lineno">  7 </span>        Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">1</span>), Category.WORK),</span>
-<span class="lineno">  8 </span>        Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>        Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>        Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:7</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno">  4 </span>
-<span class="lineno">  5 </span><span class="keyword">object</span> SampleData {
-<span class="lineno">  6 </span>    <span class="keyword">fun</span> getTasks(): List&lt;Task> = listOf(
-<span class="caretline"><span class="lineno">  7 </span>        Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">1</span>), Category.WORK),</span>
-<span class="lineno">  8 </span>        Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>        Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>        Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:8</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  5 </span><span class="keyword">object</span> SampleData {
-<span class="lineno">  6 </span>    <span class="keyword">fun</span> getTasks(): List&lt;Task> = listOf(
-<span class="lineno">  7 </span>        Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="caretline"><span class="lineno">  8 </span>        Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>(), Category.SHOPPING),</span>
-<span class="lineno">  9 </span>        Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>        Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>        Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:9</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  6 </span>  <span class="keyword">fun</span> getTasks(): List&lt;Task> = listOf(
-<span class="lineno">  7 </span>      Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno">  8 </span>      Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="caretline"><span class="lineno">  9 </span>      Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.<span class="error">now</span>(), Category.HEALTH),</span>
-<span class="lineno"> 10 </span>      Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>      Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>      Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:10</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  7 </span>  Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno">  8 </span>  Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">3</span>), Category.WORK),</span>
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-</pre>
-
-<button class="mdl-button mdl-js-button mdl-button--primary" id="NewApiDivLink" onclick="reveal('NewApiDiv');" />+ 43 More Occurrences...</button>
-<div id="NewApiDiv" style="display: none">
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:10</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno">  7 </span>  Task(<span class="string">"1"</span>, <span class="string">"Review pull requests"</span>, <span class="string">"Check open PRs on the main repo and provide feedback"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno">  8 </span>  Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">3</span>), Category.WORK),</span>
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:11</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  8 </span>  Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">7</span>), Category.HEALTH),</span>
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:11</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno">  8 </span>  Task(<span class="string">"2"</span>, <span class="string">"Buy groceries"</span>, <span class="string">"Milk, eggs, bread, fruits, vegetables"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">7</span>), Category.HEALTH),</span>
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:12</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:12</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno">  9 </span>  Task(<span class="string">"3"</span>, <span class="string">"Morning run"</span>, <span class="string">"5km run in the park"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:13</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">14</span>), Category.PERSONAL),</span>
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:13</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 10 </span>  Task(<span class="string">"4"</span>, <span class="string">"Prepare presentation"</span>, <span class="string">"Create slides for the Maestro testing demo"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.WORK),
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">14</span>), Category.PERSONAL),</span>
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:14</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 11 </span>  Task(<span class="string">"5"</span>, <span class="string">"Call dentist"</span>, <span class="string">"Schedule annual checkup appointment"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">7</span>), Category.HEALTH),
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>(), Category.WORK),</span>
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:15</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#minusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="caretline"><span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().<span class="error">minusDays</span>(<span class="number">1</span>), Category.PERSONAL),</span>
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:15</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 12 </span>  Task(<span class="string">"6"</span>, <span class="string">"Update dependencies"</span>, <span class="string">"Upgrade Kotlin and Compose to latest versions"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="caretline"><span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.<span class="error">now</span>().minusDays(<span class="number">1</span>), Category.PERSONAL),</span>
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:16</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">1</span>), Category.HEALTH),</span>
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:16</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 13 </span>  Task(<span class="string">"7"</span>, <span class="string">"Read Kotlin coroutines book"</span>, <span class="string">"Chapter 5-7 on structured concurrency"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">14</span>), Category.PERSONAL),
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">1</span>), Category.HEALTH),</span>
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:17</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">5</span>), Category.SHOPPING),</span>
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:17</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 14 </span>  Task(<span class="string">"8"</span>, <span class="string">"Fix login bug"</span>, <span class="string">"Users report intermittent login failures on slow networks"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">5</span>), Category.SHOPPING),</span>
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:18</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="caretline"><span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:18</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 15 </span>  Task(<span class="string">"9"</span>, <span class="string">"Organize desk"</span>, <span class="string">"Clean up cables and sort documents"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now().minusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="caretline"><span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:19</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">4</span>), Category.PERSONAL),</span>
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:19</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 16 </span>  Task(<span class="string">"10"</span>, <span class="string">"Gym session"</span>, <span class="string">"Upper body workout and stretching"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">4</span>), Category.PERSONAL),</span>
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:20</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">6</span>), Category.WORK),</span>
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:20</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 17 </span>  Task(<span class="string">"11"</span>, <span class="string">"Order new keyboard"</span>, <span class="string">"Mechanical keyboard with brown switches"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING),
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">6</span>), Category.WORK),</span>
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:21</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">3</span>), Category.SHOPPING),</span>
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:21</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 18 </span>  Task(<span class="string">"12"</span>, <span class="string">"Write unit tests"</span>, <span class="string">"Cover the TaskRepository with tests"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">3</span>), Category.SHOPPING),</span>
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:22</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 19 </span>  Task(<span class="string">"13"</span>, <span class="string">"Plan weekend trip"</span>, <span class="string">"Research destinations and book accommodation"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">4</span>), Category.PERSONAL),
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="caretline"><span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.<span class="error">now</span>(), Category.HEALTH),</span>
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:23</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 20 </span>  Task(<span class="string">"14"</span>, <span class="string">"Refactor navigation"</span>, <span class="string">"Migrate to type-safe navigation in Compose"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">6</span>), Category.WORK),
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>(), Category.WORK),</span>
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:24</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="caretline"><span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">1</span>), Category.PERSONAL),</span>
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:24</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 21 </span>  Task(<span class="string">"15"</span>, <span class="string">"Buy vitamins"</span>, <span class="string">"Vitamin D and Omega-3 supplements"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">3</span>), Category.SHOPPING),
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="caretline"><span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">1</span>), Category.PERSONAL),</span>
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:25</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>  Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:25</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 22 </span>  Task(<span class="string">"16"</span>, <span class="string">"Meditate"</span>, <span class="string">"15 minutes guided meditation"</span>, Priority.LOW, <span class="keyword">true</span>, LocalDate.now(), Category.HEALTH),
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">2</span>), Category.WORK),</span>
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>  Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:26</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">1</span>), Category.HEALTH),</span>
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>  Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="lineno"> 29 </span>  Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:26</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 23 </span>  Task(<span class="string">"17"</span>, <span class="string">"Deploy staging build"</span>, <span class="string">"Push v2.1.0 to staging environment"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.WORK),
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">1</span>), Category.HEALTH),</span>
-<span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>  Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="lineno"> 29 </span>  Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:27</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 24 </span>  Task(<span class="string">"18"</span>, <span class="string">"Water plants"</span>, <span class="string">"Indoor plants need watering every 3 days"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.PERSONAL),
-<span class="lineno"> 25 </span>  Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>  Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="caretline"><span class="lineno"> 27 </span>  Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>(), Category.SHOPPING),</span>
-<span class="lineno"> 28 </span>  Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="lineno"> 29 </span>  Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno"> 30 </span>  Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING)
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:28</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 25 </span>      Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>      Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>      Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="caretline"><span class="lineno"> 28 </span>      Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">10</span>), Category.PERSONAL),</span>
-<span class="lineno"> 29 </span>      Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno"> 30 </span>      Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING)
-<span class="lineno"> 31 </span>  )
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:28</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 25 </span>      Task(<span class="string">"19"</span>, <span class="string">"Schedule team sync"</span>, <span class="string">"Weekly standup for the mobile team"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">2</span>), Category.WORK),
-<span class="lineno"> 26 </span>      Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>      Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="caretline"><span class="lineno"> 28 </span>      Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">10</span>), Category.PERSONAL),</span>
-<span class="lineno"> 29 </span>      Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="lineno"> 30 </span>      Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING)
-<span class="lineno"> 31 </span>  )
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:29</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 26 </span>        Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>        Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>        Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 29 </span>        Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">1</span>), Category.WORK),</span>
-<span class="lineno"> 30 </span>        Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING)
-<span class="lineno"> 31 </span>    )
-<span class="lineno"> 32 </span>}
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:29</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 26 </span>        Task(<span class="string">"20"</span>, <span class="string">"Yoga class"</span>, <span class="string">"Evening yoga at 6 PM"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.HEALTH),
-<span class="lineno"> 27 </span>        Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>        Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="caretline"><span class="lineno"> 29 </span>        Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">1</span>), Category.WORK),</span>
-<span class="lineno"> 30 </span>        Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">5</span>), Category.SHOPPING)
-<span class="lineno"> 31 </span>    )
-<span class="lineno"> 32 </span>}
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:30</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno"> 27 </span>        Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>        Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="lineno"> 29 </span>        Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 30 </span>        Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.<span class="error">now</span>().plusDays(<span class="number">5</span>), Category.SHOPPING)</span>
-<span class="lineno"> 31 </span>    )
-<span class="lineno"> 32 </span>}
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/data/SampleData.kt</a>:30</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#plusDays</code></span><br /><pre class="errorlines">
-<span class="lineno"> 27 </span>        Task(<span class="string">"21"</span>, <span class="string">"Return package"</span>, <span class="string">"Return the wrong-sized shoes"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now(), Category.SHOPPING),
-<span class="lineno"> 28 </span>        Task(<span class="string">"22"</span>, <span class="string">"Backup photos"</span>, <span class="string">"Export photos from phone to cloud storage"</span>, Priority.LOW, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">10</span>), Category.PERSONAL),
-<span class="lineno"> 29 </span>        Task(<span class="string">"23"</span>, <span class="string">"Code review meeting"</span>, <span class="string">"Review architecture decisions with the team"</span>, Priority.HIGH, <span class="keyword">false</span>, LocalDate.now().plusDays(<span class="number">1</span>), Category.WORK),
-<span class="caretline"><span class="lineno"> 30 </span>        Task(<span class="string">"24"</span>, <span class="string">"Buy birthday gift"</span>, <span class="string">"Gift for Sarah's birthday next week"</span>, Priority.MEDIUM, <span class="keyword">false</span>, LocalDate.now().<span class="error">plusDays</span>(<span class="number">5</span>), Category.SHOPPING)</span>
-<span class="lineno"> 31 </span>    )
-<span class="lineno"> 32 </span>}
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskDetailScreen.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskDetailScreen.kt</a>:159</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#format</code></span><br /><pre class="errorlines">
-<span class="lineno"> 156 </span>  Column {
-<span class="lineno"> 157 </span>      Text(<span class="string">"Due Date"</span>, style = MaterialTheme.typography.labelSmall)
-<span class="lineno"> 158 </span>      Text(
-<span class="caretline"><span class="lineno"> 159 </span>          task.dueDate?.<span class="error">format</span>(DateTimeFormatter.ofPattern(<span class="string">"MMM dd, yyyy"</span>))</span>
-<span class="lineno"> 160 </span>              ?: <span class="string">"No due date"</span>,
-<span class="lineno"> 161 </span>          style = MaterialTheme.typography.bodyMedium,
-<span class="lineno"> 162 </span>          modifier = Modifier.testTag(<span class="string">"task_due_date"</span>)
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskDetailScreen.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskDetailScreen.kt</a>:159</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.format.DateTimeFormatter#ofPattern</code></span><br /><pre class="errorlines">
-<span class="lineno"> 156 </span>  Column {
-<span class="lineno"> 157 </span>      Text(<span class="string">"Due Date"</span>, style = MaterialTheme.typography.labelSmall)
-<span class="lineno"> 158 </span>      Text(
-<span class="caretline"><span class="lineno"> 159 </span>          task.dueDate?.format(DateTimeFormatter.<span class="error">ofPattern</span>(<span class="string">"MMM dd, yyyy"</span>))</span>
-<span class="lineno"> 160 </span>              ?: <span class="string">"No due date"</span>,
-<span class="lineno"> 161 </span>          style = MaterialTheme.typography.bodyMedium,
-<span class="lineno"> 162 </span>          modifier = Modifier.testTag(<span class="string">"task_due_date"</span>)
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskListScreen.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskListScreen.kt</a>:262</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#format</code></span><br /><pre class="errorlines">
-<span class="lineno"> 259 </span>              )
-<span class="lineno"> 260 </span>              task.dueDate?.let {
-<span class="lineno"> 261 </span>                  Text(
-<span class="caretline"><span class="lineno"> 262 </span>                      text = it.<span class="error">format</span>(DateTimeFormatter.ofPattern(<span class="string">"MMM dd"</span>)),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 263 </span>                      style = MaterialTheme.typography.labelSmall,
-<span class="lineno"> 264 </span>                      color = MaterialTheme.colorScheme.onSurfaceVariant
-<span class="lineno"> 265 </span>                  )
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskListScreen.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/ui/screens/TaskListScreen.kt</a>:262</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.format.DateTimeFormatter#ofPattern</code></span><br /><pre class="errorlines">
-<span class="lineno"> 259 </span>              )
-<span class="lineno"> 260 </span>              task.dueDate?.let {
-<span class="lineno"> 261 </span>                  Text(
-<span class="caretline"><span class="lineno"> 262 </span>                      text = it.format(DateTimeFormatter.<span class="error">ofPattern</span>(<span class="string">"MMM dd"</span>)),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 263 </span>                      style = MaterialTheme.typography.labelSmall,
-<span class="lineno"> 264 </span>                      color = MaterialTheme.colorScheme.onSurfaceVariant
-<span class="lineno"> 265 </span>                  )
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/viewmodel/TaskViewModel.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/viewmodel/TaskViewModel.kt</a>:97</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#isBefore</code></span><br /><pre class="errorlines">
-<span class="lineno">  94 </span>    <span class="keyword">fun</span> getTotalCount(): Int = uiState.value.tasks.size
-<span class="lineno">  95 </span>    <span class="keyword">fun</span> getTasksByCategory(): Map&lt;Category, Int> = uiState.value.tasks.groupBy { it.category }.mapValues { it.value.size }
-<span class="lineno">  96 </span>    <span class="keyword">fun</span> getOverdueCount(): Int = uiState.value.tasks.count {
-<span class="caretline"><span class="lineno">  97 </span>        !it.isCompleted &amp;&amp; it.dueDate != <span class="keyword">null</span> &amp;&amp; it.dueDate.<span class="error">isBefore</span>(LocalDate.now())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  98 </span>    }
-<span class="lineno">  99 </span>}
-</pre>
-
-<span class="location"><a href="../../src/main/java/com/carlosjimz87/maestrotestingdemo/viewmodel/TaskViewModel.kt">../../src/main/java/com/carlosjimz87/maestrotestingdemo/viewmodel/TaskViewModel.kt</a>:97</span>: <span class="message">Call requires API level 26, or core library desugaring (current min is 24): <code>java.time.LocalDate#now</code></span><br /><pre class="errorlines">
-<span class="lineno">  94 </span>    <span class="keyword">fun</span> getTotalCount(): Int = uiState.value.tasks.size
-<span class="lineno">  95 </span>    <span class="keyword">fun</span> getTasksByCategory(): Map&lt;Category, Int> = uiState.value.tasks.groupBy { it.category }.mapValues { it.value.size }
-<span class="lineno">  96 </span>    <span class="keyword">fun</span> getOverdueCount(): Int = uiState.value.tasks.count {
-<span class="caretline"><span class="lineno">  97 </span>        !it.isCompleted &amp;&amp; it.dueDate != <span class="keyword">null</span> &amp;&amp; it.dueDate.isBefore(LocalDate.<span class="error">now</span>())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  98 </span>    }
-<span class="lineno">  99 </span>}
-</pre>
-
-</div>
-</div>
-<div class="metadata"><div class="explanation" id="explanationNewApi" style="display: none;">
-This check scans through all the Android API calls in the application and warns about any calls that are not available on <b>all</b> versions targeted by this application (according to its minimum SDK attribute in the manifest).<br/>
-<br/>
-If you really want to use this API and don't need to support older devices just set the <code>minSdkVersion</code> in your <code>build.gradle</code> or <code>AndroidManifest.xml</code> files.<br/>
-<br/>
-If your code is <b>deliberately</b> accessing newer APIs, and you have ensured (e.g. with conditional execution) that this code will only ever be called on a supported platform, then you can annotate your class or method with the <code>@TargetApi</code> annotation specifying the local minimum SDK to apply, such as <code>@TargetApi(11)</code>, such that this check considers 11 rather than your manifest file's minimum SDK as the required API level.<br/>
-<br/>
-If you are deliberately setting <code>android:</code> attributes in style definitions, make sure you place this in a <code>values-v</code><i>NN</i> folder in order to avoid running into runtime conflicts on certain devices where manufacturers have added custom attributes whose ids conflict with the new ones on later platforms.<br/>
-<br/>
-Similarly, you can use tools:targetApi="11" in an XML file to indicate that the element will only be inflated in an adequate context.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
-To suppress this error, use the issue id "NewApi" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
-<br/></div>
-</div>
-</div>
-<div class="chips">
-<span class="mdl-chip">
-    <span class="mdl-chip__text">NewApi</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Correctness</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Error</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Priority 6/10</span>
-</span>
-</div>
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationNewApiLink" onclick="reveal('explanationNewApi');">
-Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="NewApiCardLink" onclick="hideid('NewApiCard');">
-Dismiss</button>            </div>
-            </div>
-          </section><a name="OldTargetApi"></a>
+<a name="OldTargetApi"></a>
 <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="OldTargetApiCard" style="display: block;">
             <div class="mdl-card mdl-cell mdl-cell--12-col">
   <div class="mdl-card__title">
@@ -816,13 +299,21 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../../gradle/wrapper/gradle-wrapper.properties">../../../gradle/wrapper/gradle-wrapper.properties</a>:4</span>: <span class="message">A newer version of Gradle than 9.3.1 is available: 9.4.1</span><br /><pre class="errorlines">
+<span class="location"><a href="../../../gradle/wrapper/gradle-wrapper.properties">../../../gradle/wrapper/gradle-wrapper.properties</a>:4</span>: <span class="message">A newer version of Gradle than 9.3.1 is available: 9.9.1</span><br /><pre class="errorlines">
 <span class="lineno"> 1 </span>#Wed Jan 29 16:22:39 CET 2025
 <span class="lineno"> 2 </span>distributionBase=GRADLE_USER_HOME
 <span class="lineno"> 3 </span>distributionPath=wrapper/dists
 <span class="caretline"><span class="lineno"> 4 </span>distributionUrl=<span class="warning">https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno"> 5 </span>zipStoreBase=GRADLE_USER_HOME
 <span class="lineno"> 6 </span>zipStorePath=wrapper/dists
+</pre>
+
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:2</span>: <span class="message">A newer version of com.android.application than 9.1.0 is available: 9.5.1. (There is also a newer version of 9.1.&#55349;&#56421; available, if upgrading to 9.5.1 is difficult: 9.1.1)</span><br /><pre class="errorlines">
+<span class="lineno">  1 </span>[versions]
+<span class="caretline"><span class="lineno">  2 </span>agp = <span class="warning">"9.1.0"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  3 </span>kotlin = "2.3.20"
+<span class="lineno">  4 </span>coreKtx = "1.16.0"
+<span class="lineno">  5 </span>junit = "4.13.2"
 </pre>
 
 </div>
@@ -861,7 +352,7 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:4</span>: <span class="message">A newer version of androidx.core:core-ktx than 1.16.0 is available: 1.18.0</span><br /><pre class="errorlines">
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:4</span>: <span class="message">A newer version of androidx.core:core-ktx than 1.16.0 is available: 1.19.1</span><br /><pre class="errorlines">
 <span class="lineno">  1 </span>[versions]
 <span class="lineno">  2 </span>agp = "9.1.0"
 <span class="lineno">  3 </span>kotlin = "2.3.20"
@@ -891,6 +382,16 @@ Dismiss</button>            </div>
 <span class="lineno"> 10 </span>composeBom = "2026.03.00"
 </pre>
 
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:8</span>: <span class="message">A newer version of androidx.lifecycle:lifecycle-runtime-ktx than 2.10.0 is available: 2.11.0</span><br /><pre class="errorlines">
+<span class="lineno">  5 </span>junit = "4.13.2"
+<span class="lineno">  6 </span>junitVersion = "1.2.1"
+<span class="lineno">  7 </span>espressoCore = "3.6.1"
+<span class="caretline"><span class="lineno">  8 </span>lifecycleRuntimeKtx = <span class="warning">"2.10.0"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  9 </span>activityCompose = "1.12.4"
+<span class="lineno"> 10 </span>composeBom = "2026.03.00"
+<span class="lineno"> 11 </span>navigationCompose = "2.9.0"
+</pre>
+
 <span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:9</span>: <span class="message">A newer version of androidx.activity:activity-compose than 1.12.4 is available: 1.13.0</span><br /><pre class="errorlines">
 <span class="lineno">  6 </span>junitVersion = "1.2.1"
 <span class="lineno">  7 </span>espressoCore = "3.6.1"
@@ -901,7 +402,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 12 </span>lifecycleViewmodelCompose = "2.10.0"
 </pre>
 
-<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:10</span>: <span class="message">A newer version of androidx.compose:compose-bom than 2026.03.00 is available: 2026.03.01</span><br /><pre class="errorlines">
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:10</span>: <span class="message">A newer version of androidx.compose:compose-bom than 2026.03.00 is available: 2026.09.00</span><br /><pre class="errorlines">
 <span class="lineno">  7 </span>espressoCore = "3.6.1"
 <span class="lineno">  8 </span>lifecycleRuntimeKtx = "2.10.0"
 <span class="lineno">  9 </span>activityCompose = "1.12.4"
@@ -910,7 +411,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 12 </span>lifecycleViewmodelCompose = "2.10.0"
 </pre>
 
-<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:11</span>: <span class="message">A newer version of androidx.navigation:navigation-compose than 2.9.0 is available: 2.9.7</span><br /><pre class="errorlines">
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:11</span>: <span class="message">A newer version of androidx.navigation:navigation-compose than 2.9.0 is available: 2.10.2</span><br /><pre class="errorlines">
 <span class="lineno">  8 </span>lifecycleRuntimeKtx = "2.10.0"
 <span class="lineno">  9 </span>activityCompose = "1.12.4"
 <span class="lineno"> 10 </span>composeBom = "2026.03.00"
@@ -918,6 +419,16 @@ Dismiss</button>            </div>
 <span class="lineno"> 12 </span>lifecycleViewmodelCompose = "2.10.0"
 <span class="lineno"> 13 </span>
 <span class="lineno"> 14 </span>[libraries]
+</pre>
+
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:12</span>: <span class="message">A newer version of androidx.lifecycle:lifecycle-viewmodel-compose than 2.10.0 is available: 2.11.0</span><br /><pre class="errorlines">
+<span class="lineno">  9 </span>activityCompose = "1.12.4"
+<span class="lineno"> 10 </span>composeBom = "2026.03.00"
+<span class="lineno"> 11 </span>navigationCompose = "2.9.0"
+<span class="caretline"><span class="lineno"> 12 </span>lifecycleViewmodelCompose = <span class="warning">"2.10.0"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 13 </span>
+<span class="lineno"> 14 </span>[libraries]
+<span class="lineno"> 15 </span>androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 </pre>
 
 </div>
@@ -945,6 +456,60 @@ To suppress this error, use the issue id "GradleDependency" as explained in the 
               <div class="mdl-card__actions mdl-card--border">
 <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationGradleDependencyLink" onclick="reveal('explanationGradleDependency');">
 Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="GradleDependencyCardLink" onclick="hideid('GradleDependencyCard');">
+Dismiss</button>            </div>
+            </div>
+          </section><a name="NewerVersionAvailable"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="NewerVersionAvailableCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Newer Library Versions Available</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:3</span>: <span class="message">A newer version of org.jetbrains.kotlin.android than 2.3.20 is available: 2.4.21</span><br /><pre class="errorlines">
+<span class="lineno">  1 </span>[versions]
+<span class="lineno">  2 </span>agp = "9.1.0"
+<span class="caretline"><span class="lineno">  3 </span>kotlin = <span class="warning">"2.3.20"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  4 </span>coreKtx = "1.16.0"
+<span class="lineno">  5 </span>junit = "4.13.2"
+<span class="lineno">  6 </span>junitVersion = "1.2.1"
+</pre>
+
+<span class="location"><a href="../../../gradle/libs.versions.toml">../../../gradle/libs.versions.toml</a>:3</span>: <span class="message">A newer version of org.jetbrains.kotlin.plugin.compose than 2.3.20 is available: 2.4.21</span><br /><pre class="errorlines">
+<span class="lineno">  1 </span>[versions]
+<span class="lineno">  2 </span>agp = "9.1.0"
+<span class="caretline"><span class="lineno">  3 </span>kotlin = <span class="warning">"2.3.20"</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  4 </span>coreKtx = "1.16.0"
+<span class="lineno">  5 </span>junit = "4.13.2"
+<span class="lineno">  6 </span>junitVersion = "1.2.1"
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationNewerVersionAvailable" style="display: none;">
+This detector checks with a central repository to see if there are newer versions available for the dependencies used by this project. This is similar to the <code>GradleDependency</code> check, which checks for newer versions available in the Android SDK tools and libraries, but this works with any MavenCentral dependency, and connects to the library every time, which makes it more flexible but also <b>much</b> slower.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "NewerVersionAvailable" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">NewerVersionAvailable</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 4/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationNewerVersionAvailableLink" onclick="reveal('explanationNewerVersionAvailable');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="NewerVersionAvailableCardLink" onclick="hideid('NewerVersionAvailableCard');">
 Dismiss</button>            </div>
             </div>
           </section>
@@ -1073,6 +638,53 @@ To suppress this error, use the issue id "UnusedResources" as explained in the <
               <div class="mdl-card__actions mdl-card--border">
 <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationUnusedResourcesLink" onclick="reveal('explanationUnusedResources');">
 Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="UnusedResourcesCardLink" onclick="hideid('UnusedResourcesCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Productivity"></a>
+<a name="UseTomlInstead"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="UseTomlInsteadCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Use TOML Version Catalog Instead</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../build.gradle.kts">../../build.gradle.kts</a>:43</span>: <span class="message">Use version catalog instead</span><br /><pre class="errorlines">
+<span class="lineno"> 40 </span>}
+<span class="lineno"> 41 </span>
+<span class="lineno"> 42 </span>dependencies {
+<span class="caretline"><span class="lineno"> 43 </span>    coreLibraryDesugaring(<span class="warning">"com.android.tools:desugar_jdk_libs:2.1.5"</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 44 </span>
+<span class="lineno"> 45 </span>    implementation(libs.androidx.core.ktx)
+<span class="lineno"> 46 </span>    implementation(libs.androidx.lifecycle.runtime.ktx)
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationUseTomlInstead" style="display: none;">
+If your project is using a <code>libs.versions.toml</code> file, you should place all Gradle dependencies in the TOML file. This lint check looks for version declarations outside of the TOML file and suggests moving them (and in the IDE, provides a quickfix to performing the operation automatically).<br/>To suppress this error, use the issue id "UseTomlInstead" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">UseTomlInstead</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Productivity</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 4/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationUseTomlInsteadLink" onclick="reveal('explanationUseTomlInstead');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="UseTomlInsteadCardLink" onclick="hideid('UseTomlInsteadCard');">
 Dismiss</button>            </div>
             </div>
           </section>
