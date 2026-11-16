@@ -8,6 +8,9 @@ adb wait-for-device
 # Pixel 2 default height lets the IME cover the unscrollable login fields.
 adb shell wm size 1080x2280
 adb shell wm density 360
+# Keep Compose/NavHost animator transitions active, as on the prior device.
+# Window/transition animations stay disabled by the emulator action.
+adb shell settings put global animator_duration_scale 1
 adb install -r qa-apk/app-debug.apk
 adb logcat -c
 if [ "$shard" = ai ]; then

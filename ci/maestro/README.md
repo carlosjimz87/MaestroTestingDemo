@@ -9,6 +9,9 @@ The app, assertions, login and per-case clearState are unchanged.
 - Two independent Ubuntu 24.04 runners test cases 01–06 and 07–12 against that exact APK.
   Each uses native Android 14 / API34, google_apis x86_64 Pixel2, KVM, 2 cores, 2048M RAM,
   headless rendering and disabled system animations.
+- The Pixel2 viewport is overridden to 1080x2280 at density360 (480x1013dp)
+  so the keyboard does not obscure the unchanged login fields. Window/transition
+  animations are disabled; animator scale stays at1 for Compose/NavHost startup.
 - A clean boot snapshot is cached **before APK installation**. Shard data is never cached.
   Cache identity includes the emulator version and emulator workflow configuration.
 - Maestro CLI 2.12.1 is checksum-pinned. Only its installed distribution is cached.
