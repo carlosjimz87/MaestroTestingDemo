@@ -1,289 +1,151 @@
-name: Maestro E2E with Docker Android Emulator
+name: Maestro Android CI
 
 on:
   push:
-    branches: [ main, codex/maestro-ci-piloto ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      cache_mode:
+        description: Benchmark cache mode
+        type: choice
+        options: [normal, cold]
+        default: normal
+      run_ai:
+        description: Explicitly run the existing external AI checks (may consume existing service credits)
+        type: boolean
+        default: false
 
 permissions:
-  contents: write
+  contents: read
+  actions: read
+
+concurrency:
+  group: maestro-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CI_CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
-  maestro-e2e:
+  build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    services:
-      emulator:
-        image: budtmo/docker-android:emulator_14.0
-        ports:
-          - 6080:6080
-          - 5554:5554
-          - 5555:5555
-        options: >-
-          --privileged
-          --device /dev/kvm
-          -e EMULATOR_DEVICE="Samsung Galaxy S10"
-          -e WEB_VNC=true
-          -e APPIUM=false
-          -e AUTO_RECORD=false
-          -e ENFORCE_DEV_MODE=false
-
+    timeout-minutes: 20
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
         with:
+          distribution: temurin
           java-version: '21'
-          distribution: 'temurin'
-
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: gradle-
-
-      - name: Build APK
-        run: ./gradlew assembleDebug
-
-      - name: Run Lint
-        run: ./gradlew lintDebug
-
+          cache-provider: basic
+          cache-disabled: ${{ inputs.cache_mode == 'cold' }}
+          cache-read-only: ${{ github.event.pull_request.head.repo.fork == true }}
+          dependency-graph: disabled
+      - name: Test evidence verifier
+        run: python3 -m unittest discover -s ci/maestro -p 'test_*.py' -v
+      - name: Build APK and blocking lint once
+        run: ./gradlew --build-cache assembleDebug lintDebug
+      - name: Bind APK to revision
+        run: |
+          mkdir -p qa-apk
+          cp app/build/outputs/apk/debug/app-debug.apk qa-apk/
+          python3 ci/maestro/verify.py apk qa-apk
       - name: Upload QA APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: maestro-qa-apk-${{ github.run_attempt }}
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: qa-apk/
           if-no-files-found: error
           retention-days: 7
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: maestro-lint-${{ github.run_attempt }}
+          path: app/build/reports/lint-results-debug.*
+          if-no-files-found: warn
+          retention-days: 7
 
-      - name: Install Maestro CLI
-        run: |
-          curl -Ls https://get.maestro.mobile.dev | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+  maestro:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ['1', '2']
+    uses: ./.github/workflows/maestro-device.yaml
+    with:
+      shard: ${{ matrix.shard }}
+      cold: ${{ inputs.cache_mode == 'cold' }}
 
-      - name: Install ADB
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y android-tools-adb
+  maestro-ai:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_ai }}
+    needs: build
+    uses: ./.github/workflows/maestro-device.yaml
+    with:
+      shard: ai
+      cold: ${{ inputs.cache_mode == 'cold' }}
+    secrets:
+      MAESTRO_API_KEY: ${{ secrets.MAESTRO_API_KEY }}
 
-      - name: Wait for Emulator
-        run: |
-          MAX_RETRIES=12
-          RETRY=0
-          until adb connect localhost:5555 | grep -q "connected"; do
-            RETRY=$((RETRY + 1))
-            if [ $RETRY -ge $MAX_RETRIES ]; then
-              echo "Failed to connect to emulator after $MAX_RETRIES attempts"
-              exit 1
-            fi
-            echo "Waiting for emulator connection (attempt $RETRY/$MAX_RETRIES)..."
-            sleep 5
-          done
-
-          DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
-          echo "Using emulator: $DEVICE_ID"
-          adb -s "$DEVICE_ID" wait-for-device
-
-          # Wait for boot with timeout
-          BOOT_TIMEOUT=120
-          ELAPSED=0
-          while [ -z "$(adb -s "$DEVICE_ID" shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" ]; do
-            if [ $ELAPSED -ge $BOOT_TIMEOUT ]; then
-              echo "Emulator boot timed out after ${BOOT_TIMEOUT}s"
-              exit 1
-            fi
-            sleep 2
-            ELAPSED=$((ELAPSED + 2))
-          done
-
-          echo "Emulator booted successfully"
-          adb -s "$DEVICE_ID" shell getprop ro.build.display.id
-          adb -s "$DEVICE_ID" shell input keyevent 82
-
-      - name: Install APK
-        run: |
-          DEVICE_ID=$(adb devices | grep 'device$' | awk 'NR==1{print $1}')
-          adb -s "$DEVICE_ID" install -r app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Run Maestro Tests
-        shell: bash
+  maestro-e2e:
+    name: maestro-e2e
+    if: always()
+    needs: [build, maestro]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      BUILD_RESULT: ${{ needs.build.result }}
+      SHARDS_RESULT: ${{ needs.maestro.result }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         continue-on-error: true
-        env:
-          MAESTRO_API_KEY: ${{ secrets.MAESTRO_API_KEY }}
-        run: |
-          rm -rf screenshots maestro-report maestro-output.log || true
-          mkdir -p screenshots maestro-report
-
-          maestro test maestro_flows/flows.yaml \
-            --format html-detailed \
-            --output maestro-report/index.html \
-            | tee maestro-output.log
-
-          mv *.png screenshots/ || true
-
-      - name: Run AI Visual Checks
-        shell: bash
-        if: ${{ env.MAESTRO_API_KEY != '' }}
+        with:
+          name: maestro-shard-1-${{ github.run_attempt }}
+          path: reports/shard-1
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         continue-on-error: true
-        env:
-          MAESTRO_API_KEY: ${{ secrets.MAESTRO_API_KEY }}
-        run: |
-          mkdir -p maestro-ai-report
-
-          maestro test maestro_flows/ai_visual_check.yaml \
-            --format html-detailed \
-            --output maestro-ai-report/index.html \
-            | tee -a maestro-output.log
-
-          mv *.png screenshots/ || true
-
-      - name: Capture emulator diagnostics
+        with:
+          name: maestro-shard-2-${{ github.run_attempt }}
+          path: reports/shard-2
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        continue-on-error: true
+        with:
+          name: maestro-qa-apk-${{ github.run_attempt }}
+          path: reports/apk
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        continue-on-error: true
+        with:
+          name: maestro-lint-${{ github.run_attempt }}
+          path: reports/lint
+      - name: Require exactly twelve passing cases from this attempt
+        run: python3 ci/maestro/verify.py verify reports
+      - name: Upload combined reports
         if: always()
-        shell: bash
-        run: |
-          mkdir -p emulator-diagnostics
-          DEVICE_ID=$(adb devices | awk '$2 == "device" {print $1; exit}')
-          if [ -n "$DEVICE_ID" ]; then
-            timeout 20 adb -s "$DEVICE_ID" logcat -b crash -d > emulator-diagnostics/crash-logcat.txt || true
-            timeout 20 adb -s "$DEVICE_ID" shell dumpsys activity activities > emulator-diagnostics/activities.txt || true
-            timeout 20 adb -s "$DEVICE_ID" shell uiautomator dump /sdcard/maestro-window.xml || true
-            timeout 20 adb -s "$DEVICE_ID" pull /sdcard/maestro-window.xml emulator-diagnostics/window.xml || true
-            timeout 20 adb -s "$DEVICE_ID" exec-out screencap -p > emulator-diagnostics/screen.png || true
-          fi
-          if [ -d "$HOME/.maestro/tests" ]; then
-            find "$HOME/.maestro/tests" -type f -name '*.png' -exec cp {} emulator-diagnostics/ \;
-          fi
-
-      - name: Test Summary
-        if: always()
-        run: |
-          echo "## Maestro E2E Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -f maestro-output.log ]; then
-            echo "### Test Output (last 30 lines)" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -30 maestro-output.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          fi
-
-      - name: Upload Test Artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: maestro-test-results-${{ github.run_attempt }}
           path: |
-            emulator-diagnostics/
-            maestro-report/
-            maestro-ai-report/
-            screenshots/
-            maestro-output.log
-            app/build/reports/lint-results-debug.html
-          retention-days: 30
+            reports/
+            !reports/apk/*.apk
+          if-no-files-found: error
+          retention-days: 7
 
-      - name: Prepare GitHub Pages
-        if: always()
-        run: |
-          mkdir -p gh-pages/screenshots
-
-          # Generate landing page
-          cat > gh-pages/index.html << 'LANDING'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>TaskFlow - Maestro Test Reports</title>
-            <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; }
-              .header { background: linear-gradient(135deg, #00897B, #00695C); color: white; padding: 2rem; text-align: center; }
-              .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-              .header p { opacity: 0.9; }
-              .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-              .card { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-              .card h2 { margin-bottom: 0.5rem; color: #00897B; }
-              .card a { color: #00897B; text-decoration: none; font-weight: 600; }
-              .card a:hover { text-decoration: underline; }
-              .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
-              .grid img { width: 100%; border-radius: 8px; border: 1px solid #ddd; }
-              .meta { font-size: 0.85rem; color: #666; margin-top: 1rem; }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h1>TaskFlow - Maestro Test Reports</h1>
-              <p>Automated E2E test results with AI-powered visual assertions</p>
-            </div>
-            <div class="container">
-              <div class="card">
-                <h2>Test Reports</h2>
-                <p><a href="report/index.html">Main Maestro Report</a> - Full E2E test suite (12 flows)</p>
-                <p style="margin-top:0.5rem"><a href="ai-report/index.html">AI Visual Check Report</a> - AI-powered visual regression tests</p>
-                <p style="margin-top:0.5rem"><a href="lint-report.html">Lint Report</a> - Static code analysis</p>
-              </div>
-              <div class="card">
-                <h2>Test Log</h2>
-                <p><a href="maestro-output.log">Full test output log</a></p>
-              </div>
-              <div class="card">
-                <h2>Screenshots</h2>
-                <div class="grid" id="screenshots"></div>
-              </div>
-              <div class="meta">
-                <p>Generated by GitHub Actions CI pipeline</p>
-              </div>
-            </div>
-            <script>
-              fetch('screenshots/').then(r => r.text()).then(html => {
-                const imgs = [...html.matchAll(/href="([^"]+\.png)"/g)].map(m => m[1]);
-                const grid = document.getElementById('screenshots');
-                imgs.forEach(img => {
-                  const a = document.createElement('a');
-                  a.href = 'screenshots/' + img;
-                  a.innerHTML = '<img src="screenshots/' + img + '" alt="' + img + '">';
-                  grid.appendChild(a);
-                });
-                if (imgs.length === 0) grid.innerHTML = '<p>No screenshots available</p>';
-              }).catch(() => {
-                document.getElementById('screenshots').innerHTML = '<p>Screenshots directory listing not available</p>';
-              });
-            </script>
-          </body>
-          </html>
-          LANDING
-
-          # Copy Maestro report
-          if [ -d maestro-report ]; then
-            mkdir -p gh-pages/report
-            cp -r maestro-report/* gh-pages/report/ || true
-          fi
-
-          # Include AI report if it exists
-          if [ -d maestro-ai-report ]; then
-            mkdir -p gh-pages/ai-report
-            cp -r maestro-ai-report/* gh-pages/ai-report/ || true
-          fi
-
-          # Include lint report
-          cp app/build/reports/lint-results-debug.html gh-pages/lint-report.html || true
-
-          # Include screenshots and assets
-          cp screenshots/*.png gh-pages/screenshots/ || true
-          cp app/src/main/assets/favicon.png gh-pages/favicon.png || true
-          cp maestro-output.log gh-pages/ || true
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  pages:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: maestro-e2e
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: maestro-test-results-${{ github.run_attempt }}
+          path: public
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
+          publish_dir: public
