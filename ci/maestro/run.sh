@@ -20,7 +20,5 @@ if [ "$shard" = ai ]; then
   fi
   maestro test maestro_flows/ai_visual_check.yaml --format junit --output evidence/junit.xml 2>&1 | tee evidence/maestro.log
 else
-  mapfile -t flows < <(python3 ci/maestro/verify.py cases --shard "$shard")
-  test "${#flows[@]}" -eq 6
-  maestro test "${flows[@]}" --format junit --output evidence/junit.xml 2>&1 | tee evidence/maestro.log
+  python3 ci/maestro/run_cases.py "$shard" 2>&1 | tee evidence/maestro.log
 fi

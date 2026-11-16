@@ -14,6 +14,9 @@ The app, assertions, login and per-case clearState are unchanged.
   animations are disabled; animator scale stays at1 for Compose/NavHost startup.
 - A clean boot snapshot is cached **before APK installation**. Shard data is never cached.
   Cache identity includes the emulator version and emulator workflow configuration.
+- Each original case gets a separate CLI process after an explicit stopped-app clear
+  and two-second Android task-removal barrier. No failed case is retried; six JUnit
+  reports are combined per shard, preserving failures and every assertion.
 - Maestro CLI 2.12.1 is checksum-pinned. Only its installed distribution is cached.
 - `maestro-e2e` requires successful build and both shards, twelve unique passing JUnit cases,
   and matching run, attempt, revision, tree and APK digest. Missing/skipped/cancelled/duplicate
