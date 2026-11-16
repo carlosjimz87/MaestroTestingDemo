@@ -2,13 +2,13 @@ Anonymous analytics enabled. To opt out, set MAESTRO_CLI_NO_ANALYTICS environmen
 
 
 Waiting for flows to complete...
-[Failed] flows (6m 36s) (Assertion is false: "Dark mode enabled" is visible)
+[Passed] flows (8m 39s)
 
-1/1 Flow Failed
+1/1 Flow Passed in 8m 39s
 
 
 Waiting for flows to complete...
-[Passed] ai_visual_check (52s)
+[Passed] ai_visual_check (54s)
 
-1/1 Flow Passed in 52s
+1/1 Flow Passed in 54s
 
