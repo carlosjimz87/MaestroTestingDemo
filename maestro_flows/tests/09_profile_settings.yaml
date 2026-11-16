@@ -22,9 +22,10 @@ appId: com.carlosjimz87.maestrotestingdemo
 - assertVisible: "Show Completed Tasks"
 - assertVisible: "A demo app for Maestro E2E testing"
 
-# Toggle a setting Dark mode with coordinates
+# Target the switch beside its label, independent of screen size or density.
 - tapOn:
-    point: 79%,22%
+    rightOf:
+      text: "Dark Mode"
 - assertVisible: "Dark mode enabled"
 
 - takeScreenshot: screenshots/09_profile_settings
